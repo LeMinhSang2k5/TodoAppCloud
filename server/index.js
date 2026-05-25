@@ -32,22 +32,22 @@ app.use((err, _req, res, _next) => {
 });
 
 async function startServer() {
-  const MONGODB_URI = process.env.MONGODB_URI;
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`API server running on port ${PORT}`);
+  });
 
-  if (MONGODB_URI) {
-    try {
-      await mongoose.connect(MONGODB_URI);
-      console.log("MongoDB connected");
-    } catch (err) {
-      console.error("MongoDB connection failed:", err.message);
-    }
-  } else {
+  const MONGODB_URI = process.env.MONGODB_URI;
+  if (!MONGODB_URI) {
     console.warn("MONGODB_URI not set – running without database");
+    return;
   }
 
-  app.listen(PORT, "127.0.0.1", () => {
-    console.log(`API server running at http://127.0.0.1:${PORT}`);
-  });
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log("MongoDB connected");
+  } catch (err) {
+    console.error("MongoDB connection failed:", err.message);
+  }
 }
 
 startServer();
