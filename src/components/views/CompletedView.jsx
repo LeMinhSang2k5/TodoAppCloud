@@ -12,13 +12,13 @@ export default function CompletedView({ tasks, loading, error, onToggle, onDelet
     <div className="list-area">
       <section className="today-view">
         <div className="list-header">
-          <h2>Completed</h2>
+          <h2>Đã hoàn thành</h2>
           <span className="task-count">
-            {doneTasks.length} task{doneTasks.length !== 1 ? "s" : ""}
+            {doneTasks.length} công việc
           </span>
         </div>
 
-        {loading && <p className="data-state">Loading tasks…</p>}
+        {loading && <p className="data-state">Đang tải công việc…</p>}
         {!loading && error && <p className="data-state warning">{error}</p>}
 
         <div className="task-list">
@@ -27,7 +27,7 @@ export default function CompletedView({ tasks, loading, error, onToggle, onDelet
           ))}
           {!loading && !error && doneTasks.length === 0 && (
             <p className="view-empty-state">
-              No completed tasks yet. Start checking things off!
+              Chưa có công việc nào hoàn thành. Hãy bắt đầu xử lý công việc!
             </p>
           )}
         </div>

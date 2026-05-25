@@ -22,11 +22,11 @@ import { useTasks } from "./hooks/useTasks";
 import { isToday } from "./utils/dates";
 
 const VIEW_TITLES = {
-  inbox: "Inbox",
-  today: "Today",
-  upcoming: "Upcoming",
-  filters: "Filters & Labels",
-  completed: "Completed",
+  inbox: "Hộp thư đến",
+  today: "Hôm nay",
+  upcoming: "Sắp tới",
+  filters: "Bộ lọc & Nhãn",
+  completed: "Đã hoàn thành",
 };
 
 export default function App() {
@@ -62,7 +62,7 @@ export default function App() {
     exportBackup,
   } = useSettings(isAuthenticated);
 
-  const { tasks, loading, error, addTask, toggleTask, deleteTask, reload: reloadTasks } = useTasks(
+  const { tasks, loading, error, addTask, toggleTask, updateTask, deleteTask, reload: reloadTasks } = useTasks(
     isAuthenticated,
     { addToBottom: settings.quickAdd.addToBottom }
   );
@@ -238,8 +238,8 @@ export default function App() {
   };
 
   const currentTitle = activeProject
-    ? `${activeProject.name} · ${VIEW_TITLES[activeView] || "Inbox"}`
-    : (VIEW_TITLES[activeView] || "Inbox");
+    ? `${activeProject.name} · ${VIEW_TITLES[activeView] || "Hộp thư đến"}`
+    : (VIEW_TITLES[activeView] || "Hộp thư đến");
 
   function renderView() {
     if (viewMode === "board") {
@@ -298,6 +298,11 @@ export default function App() {
         onDeleteFolder={handleDeleteFolder}
         activeProjectId={activeProjectId}
         onProjectSelect={handleProjectSelect}
+        tasks={tasks}
+        onAddTask={handleAddTask}
+        onUpdateTask={updateTask}
+        onDeleteTask={deleteTask}
+        onToggleTask={toggleTask}
       />
 
       <main className="content">

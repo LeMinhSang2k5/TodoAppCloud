@@ -24,6 +24,8 @@ userSchema.methods.comparePassword = function (candidate) {
 userSchema.set("toJSON", {
   transform(_doc, ret) {
     delete ret.password;
+    ret.fullName = ret.name;
+    ret.gmail = ret.email;
     return ret;
   },
 });

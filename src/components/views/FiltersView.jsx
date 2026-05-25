@@ -4,10 +4,10 @@ import TaskItem from "../common/TaskItem";
 import AddTaskInline from "../common/AddTaskInline";
 
 const PRIORITIES = [
-  { value: 1, label: "Priority 1 – Urgent", color: "#d1453b" },
-  { value: 2, label: "Priority 2 – High", color: "#eb8909" },
-  { value: 3, label: "Priority 3 – Medium", color: "#246fe0" },
-  { value: 4, label: "Priority 4 – Low", color: "#8b8b8b" },
+  { value: 1, label: "Ưu tiên 1 - Khẩn cấp", color: "#d1453b" },
+  { value: 2, label: "Ưu tiên 2 - Cao", color: "#eb8909" },
+  { value: 3, label: "Ưu tiên 3 - Trung bình", color: "#246fe0" },
+  { value: 4, label: "Ưu tiên 4 - Thấp", color: "#8b8b8b" },
 ];
 
 export default function FiltersView({
@@ -48,22 +48,22 @@ export default function FiltersView({
   const filterTitle = activeFilter
     ? activeFilter.type === "label"
       ? `# ${activeFilter.value}`
-      : PRIORITIES.find((p) => p.value === activeFilter.value)?.label || "Filtered"
-    : "All active tasks";
+      : PRIORITIES.find((p) => p.value === activeFilter.value)?.label || "Đã lọc"
+    : "Tất cả công việc đang hoạt động";
 
   return (
     <div className="filters-shell">
       <aside className="filters-sidebar">
-        <p className="filters-section-title">Filters</p>
+        <p className="filters-section-title">Bộ lọc</p>
         <button
           className={`filter-btn ${!activeFilter ? "active" : ""}`}
           type="button"
           onClick={() => setActiveFilter(null)}
         >
-          All active
+          Tất cả đang hoạt động
         </button>
 
-        <p className="filters-section-title filters-section-title-gap">Priority</p>
+        <p className="filters-section-title filters-section-title-gap">Mức ưu tiên</p>
         {PRIORITIES.map((p) => (
           <button
             key={p.value}
@@ -80,7 +80,7 @@ export default function FiltersView({
 
         {allLabels.length > 0 && (
           <>
-            <p className="filters-section-title filters-section-title-gap">Labels</p>
+            <p className="filters-section-title filters-section-title-gap">Nhãn</p>
             {allLabels.map((label) => (
               <button
                 key={label}
@@ -97,7 +97,7 @@ export default function FiltersView({
         )}
 
         {allLabels.length === 0 && (
-          <p className="filters-empty-labels">No labels yet. Add labels when creating tasks.</p>
+          <p className="filters-empty-labels">Chưa có nhãn. Hãy thêm nhãn khi tạo công việc.</p>
         )}
       </aside>
 
@@ -105,11 +105,11 @@ export default function FiltersView({
         <div className="list-header">
           <h2>{filterTitle}</h2>
           <span className="task-count">
-            {filteredTasks.length} task{filteredTasks.length !== 1 ? "s" : ""}
+            {filteredTasks.length} công việc
           </span>
         </div>
 
-        {loading && <p className="data-state">Loading tasks…</p>}
+        {loading && <p className="data-state">Đang tải công việc…</p>}
         {!loading && error && <p className="data-state warning">{error}</p>}
 
         <div className="task-list">
@@ -117,7 +117,7 @@ export default function FiltersView({
             <TaskItem key={t._id} task={t} onToggle={onToggle} onDelete={onDelete} />
           ))}
           {!loading && !error && filteredTasks.length === 0 && (
-            <p className="view-empty-state">No tasks match this filter.</p>
+            <p className="view-empty-state">Không có công việc nào khớp bộ lọc này.</p>
           )}
         </div>
 
@@ -135,7 +135,7 @@ export default function FiltersView({
           />
         ) : (
           <button className="ghost-add-task" type="button" onClick={() => setShowAdd(true)}>
-            <Plus size={14} /> Add task
+            <Plus size={14} /> Thêm công việc
           </button>
         )}
       </div>

@@ -1,22 +1,22 @@
 export const SETTING_TABS = [
-  { id: "account", label: "Account" },
-  { id: "general", label: "General" },
-  { id: "subscription", label: "Subscription" },
-  { id: "theme", label: "Theme" },
-  { id: "sidebar", label: "Sidebar" },
-  { id: "quickAdd", label: "Quick Add" },
-  { id: "productivity", label: "Productivity" },
-  { id: "reminders", label: "Reminders" },
-  { id: "notifications", label: "Notifications" },
-  { id: "backups", label: "Backups" },
-  { id: "integrations", label: "Integrations" },
-  { id: "calendars", label: "Calendars" },
+  { id: "account", label: "Tài khoản" },
+  { id: "general", label: "Chung" },
+  { id: "subscription", label: "Gói dịch vụ" },
+  { id: "theme", label: "Giao diện" },
+  { id: "sidebar", label: "Thanh bên" },
+  { id: "quickAdd", label: "Thêm nhanh" },
+  { id: "productivity", label: "Năng suất" },
+  { id: "reminders", label: "Nhắc việc" },
+  { id: "notifications", label: "Thông báo" },
+  { id: "backups", label: "Sao lưu" },
+  { id: "integrations", label: "Tích hợp" },
+  { id: "calendars", label: "Lịch" },
 ];
 
 export const WORKSPACE_TABS = [
-  { id: "wsGeneral", label: "General" },
-  { id: "wsPeople", label: "People" },
-  { id: "wsSubscription", label: "Subscription" },
+  { id: "wsGeneral", label: "Chung" },
+  { id: "wsPeople", label: "Thành viên" },
+  { id: "wsSubscription", label: "Gói dịch vụ" },
 ];
 
 export const DAY_OPTIONS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];

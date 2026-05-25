@@ -14,14 +14,14 @@ export default function FolderModal({ isOpen, onClose, onAdd, defaultType = "per
   if (!isOpen) return null;
 
   async function handleSubmit() {
-    if (!name.trim()) { setError("Folder name is required"); return; }
+    if (!name.trim()) { setError("Tên thư mục là bắt buộc"); return; }
     setSubmitting(true);
     setError("");
     try {
       await onAdd({ name: name.trim(), type });
       onClose();
     } catch (err) {
-      setError(err.message || "Failed to create folder");
+      setError(err.message || "Tạo thư mục thất bại");
     } finally {
       setSubmitting(false);
     }
@@ -33,12 +33,12 @@ export default function FolderModal({ isOpen, onClose, onAdd, defaultType = "per
         className="modal project-modal"
         role="dialog"
         aria-modal="true"
-        aria-label="Add folder"
+        aria-label="Thêm thư mục"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h3>Add folder</h3>
-          <button className="icon-btn" type="button" onClick={onClose} aria-label="Close">
+          <h3>Thêm thư mục</h3>
+          <button className="icon-btn" type="button" onClick={onClose} aria-label="Đóng">
             <X size={18} />
           </button>
         </div>
@@ -46,11 +46,11 @@ export default function FolderModal({ isOpen, onClose, onAdd, defaultType = "per
         {error && <p className="project-modal-error">{error}</p>}
 
         <label className="field-label">
-          Folder name
+          Tên thư mục
           <input
             type="text"
             className="field-input"
-            placeholder="e.g. Design Team"
+            placeholder="Ví dụ: Nhóm thiết kế"
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoFocus
@@ -59,22 +59,22 @@ export default function FolderModal({ isOpen, onClose, onAdd, defaultType = "per
         </label>
 
         <label className="field-label">
-          Type
+          Loại
           <select className="field-select" value={type} onChange={(e) => setType(e.target.value)}>
-            <option value="personal">Personal</option>
-            <option value="team">Team</option>
+            <option value="personal">Cá nhân</option>
+            <option value="team">Nhóm</option>
           </select>
         </label>
 
         <div className="modal-footer">
-          <button type="button" onClick={onClose}>Cancel</button>
+          <button type="button" onClick={onClose}>Hủy</button>
           <button
             className="btn-primary"
             type="button"
             onClick={handleSubmit}
             disabled={submitting || !name.trim()}
           >
-            {submitting ? "Adding…" : "Add folder"}
+            {submitting ? "Đang thêm…" : "Thêm thư mục"}
           </button>
         </div>
       </section>

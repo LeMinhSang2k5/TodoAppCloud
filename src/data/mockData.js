@@ -11,20 +11,20 @@ import {
 } from "lucide-react";
 
 export const navItems = [
-  { id: "search", label: "Search", Icon: Search },
-  { id: "inbox", label: "Inbox", Icon: Inbox, count: 1 },
-  { id: "today", label: "Today", Icon: Calendar, count: 1, active: true },
-  { id: "upcoming", label: "Upcoming", Icon: Clock },
-  { id: "filters", label: "Filters & Labels", Icon: Filter },
-  { id: "completed", label: "Completed", Icon: CheckCircle2 },
+  { id: "search", label: "Tìm kiếm", Icon: Search },
+  { id: "inbox", label: "Hộp thư đến", Icon: Inbox, count: 1 },
+  { id: "today", label: "Hôm nay", Icon: Calendar, count: 1, active: true },
+  { id: "upcoming", label: "Sắp tới", Icon: Clock },
+  { id: "filters", label: "Bộ lọc & Nhãn", Icon: Filter },
+  { id: "completed", label: "Đã hoàn thành", Icon: CheckCircle2 },
 ];
 
 export const projectItems = [
-  { id: "setup", label: "Team Setup Guide", Icon: Lock, count: 25 },
-  { id: "team", label: "Design Team", Icon: FolderOpen, sub: true },
+  { id: "setup", label: "Hướng dẫn thiết lập nhóm", Icon: Lock, count: 25 },
+  { id: "team", label: "Nhóm thiết kế", Icon: FolderOpen, sub: true },
   {
     id: "requests",
-    label: "Design Requests",
+    label: "Yêu cầu thiết kế",
     Icon: Hash,
     count: 7,
     active: true,
@@ -35,73 +35,73 @@ export const projectItems = [
 export const todayTasks = [
   {
     id: 1,
-    title: "Product team standup",
+    title: "Họp nhanh nhóm sản phẩm",
     timeBlock: "23:00-23:15",
-    note: "Sync blockers and finalize tomorrow priorities.",
-    tag: "Team",
+    note: "Đồng bộ vướng mắc và chốt ưu tiên cho ngày mai.",
+    tag: "Nhóm",
     done: true,
   },
   {
     id: 2,
-    title: "Send a redesign proposal",
+    title: "Gửi đề xuất thiết kế lại",
     time: "17:00",
-    note: "Include before/after UI snapshots and goals.",
-    tag: "Design Requests",
+    note: "Bao gồm ảnh UI trước/sau và mục tiêu.",
+    tag: "Yêu cầu thiết kế",
     priority: 1,
     comments: 2,
     overdue: true,
   },
   {
     id: 3,
-    title: "Write down the problem you're solving",
-    note: "Define one measurable user problem for this sprint.",
-    tag: "Inbox",
+    title: "Viết rõ vấn đề bạn đang giải quyết",
+    note: "Xác định một vấn đề người dùng có thể đo lường trong sprint này.",
+    tag: "Hộp thư đến",
   },
 ];
 
 export const boardColumns = [
   {
     id: "todo",
-    title: "To Do",
+    title: "Cần làm",
     tasks: [
       {
         id: 1,
-        title: "Send a redesign proposal",
-        date: "Today 17:00",
+        title: "Gửi đề xuất thiết kế lại",
+        date: "Hôm nay 17:00",
         dateType: "overdue",
         assignee: "S",
         assigneeColor: "#58bbb3",
         comments: 2,
-        label: "Design Requests",
+        label: "Yêu cầu thiết kế",
         priority: 1,
       },
-      { id: 2, title: "Speed improvements" },
+      { id: 2, title: "Cải thiện tốc độ" },
     ],
   },
   {
     id: "week",
-    title: "This Week",
+    title: "Tuần này",
     tasks: [
       {
         id: 3,
-        title: "Make new visuals for social pages",
-        desc: "Design and produce new visuals for social media pages...",
-        date: "Saturday  21 Feb",
+        title: "Làm bộ hình ảnh mới cho mạng xã hội",
+        desc: "Thiết kế và sản xuất bộ hình ảnh mới cho các trang mạng xã hội...",
+        date: "Thứ Bảy 21 Thg 2",
         dateType: "overdue",
         assignee: "A",
         assigneeColor: "#7ec8a4",
-        label: "design-request",
+        label: "yeu-cau-thiet-ke",
         priority: 1,
       },
       {
         id: 4,
-        title: "Better navigation with sidebar",
+        title: "Cải thiện điều hướng bằng thanh bên",
         assignee: "A",
         assigneeColor: "#7ec8a4",
       },
       {
         id: 5,
-        title: "New onboarding flow",
+        title: "Luồng onboarding mới",
         assignee: "S",
         assigneeColor: "#58bbb3",
       },
@@ -109,24 +109,24 @@ export const boardColumns = [
   },
   {
     id: "review",
-    title: "Review",
-    tasks: [{ id: 6, title: "Drag-and-drop reordering" }],
+    title: "Duyệt",
+    tasks: [{ id: 6, title: "Sắp xếp kéo thả" }],
   },
 ];
 
 export const settingNav = [
-  "Account",
-  "General",
-  "Subscription",
-  "Theme",
-  "Sidebar",
-  "Quick Add",
-  "Productivity",
-  "Reminders",
-  "Notifications",
-  "Backups",
-  "Integrations",
-  "Calendars",
+  "Tài khoản",
+  "Chung",
+  "Gói dịch vụ",
+  "Giao diện",
+  "Thanh bên",
+  "Thêm nhanh",
+  "Năng suất",
+  "Nhắc việc",
+  "Thông báo",
+  "Sao lưu",
+  "Tích hợp",
+  "Lịch",
 ];
 
 export const weekDays = ["M", "T", "W", "T", "F", "S", "S"];

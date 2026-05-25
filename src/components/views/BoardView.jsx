@@ -26,9 +26,9 @@ export default function BoardView({
     const done = tasks.filter((t) => t.done).slice(0, 8);
 
     return [
-      { id: "todo", title: "To Do", tasks: [...overdueAndToday, ...noDate] },
-      { id: "upcoming", title: "Upcoming", tasks: upcoming },
-      { id: "done", title: "Done", tasks: done },
+      { id: "todo", title: "Cần làm", tasks: [...overdueAndToday, ...noDate] },
+      { id: "upcoming", title: "Sắp tới", tasks: upcoming },
+      { id: "done", title: "Đã xong", tasks: done },
     ];
   }, [tasks]);
 
@@ -42,7 +42,7 @@ export default function BoardView({
                 {col.title}
                 <span className="col-count">{col.tasks.length}</span>
               </h3>
-              <button className="icon-btn col-more" type="button" aria-label="Column options">
+              <button className="icon-btn col-more" type="button" aria-label="Tùy chọn cột">
                 <MoreHorizontal size={15} />
               </button>
             </div>
@@ -71,7 +71,7 @@ export default function BoardView({
                     type="button"
                     onClick={() => setActiveAddColumn(col.id)}
                   >
-                    <Plus size={13} /> Add task
+                    <Plus size={13} /> Thêm công việc 
                   </button>
                 )
               )}

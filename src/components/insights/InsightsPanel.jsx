@@ -8,35 +8,35 @@ export default function InsightsPanel({ onClose }) {
     <aside className="insights-panel">
       <div className="insights-header">
         <span className="insights-title">
-          <Zap size={14} /> Insights <span className="beta-badge">BETA</span>
+          <Zap size={14} /> Phân tích <span className="beta-badge">THỬ NGHIỆM</span>
         </span>
-        <button className="icon-btn" onClick={onClose} aria-label="Close insights">
+        <button className="icon-btn" onClick={onClose} aria-label="Đóng phân tích">
           <X size={14} />
         </button>
       </div>
 
       <div className="insights-section">
-        <p className="insights-label">Health</p>
+        <p className="insights-label">Tình trạng</p>
         <span className="health-badge critical">
-          <AlertTriangle size={12} /> Critical
+          <AlertTriangle size={12} /> Nghiêm trọng
         </span>
         <p className="insights-desc">
-          This project is in critical condition with no tasks completed and one overdue P1 item.
-          Urgent focus needed to address overdue items.
+          Dự án này đang ở trạng thái nghiêm trọng vì chưa có công việc nào hoàn thành và có 1 việc P1 bị quá hạn.
+          Cần ưu tiên xử lý ngay các công việc quá hạn.
         </p>
-        <p className="insights-updated">↻ Updated 15 hours ago</p>
+        <p className="insights-updated">↻ Cập nhật 15 giờ trước</p>
       </div>
 
       <div className="insights-section">
-        <p className="insights-label">At risk</p>
+        <p className="insights-label">Có rủi ro</p>
         <div className="at-risk-item">
           <span className="overdue-dot" />
-          Make new visuals for social pages
+          Tạo bộ hình ảnh mới cho các trang mạng xã hội
         </div>
       </div>
 
       <div className="insights-section">
-        <p className="insights-label">Progress</p>
+        <p className="insights-label">Tiến độ</p>
         <div className="progress-row">
           <TrendingUp size={12} />
           <span className="progress-pct">46%</span>
@@ -51,14 +51,14 @@ export default function InsightsPanel({ onClose }) {
           <span>75</span>
         </div>
         <p className="progress-stats">
-          <span className="stat-dot completed" /> 6 completed <span className="stat-gap" />
-          <span className="stat-dot active" /> 7 active
+          <span className="stat-dot completed" /> 6 đã hoàn thành <span className="stat-gap" />
+          <span className="stat-dot active" /> 7 đang hoạt động
         </p>
       </div>
 
       <div className="insights-section">
-        <p className="insights-label">Completed</p>
-        <p className="insights-week">↗ This week: 6</p>
+        <p className="insights-label">Hoàn thành</p>
+        <p className="insights-week">↗ Tuần này: 6</p>
         <div className="week-chart">
           {weekBars.map((height, index) => (
             <div key={weekDays[index]} className="week-col">
@@ -73,9 +73,9 @@ export default function InsightsPanel({ onClose }) {
       </div>
 
       <div className="insights-section">
-        <p className="insights-label">Assigned</p>
+        <p className="insights-label">Phân công</p>
         <div className="assigned-row">
-          <Users size={12} /> 2 people
+          <Users size={12} /> 2 người
         </div>
         <div className="assignee-bars">
           <div className="assignee-bar-row">

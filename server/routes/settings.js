@@ -53,7 +53,9 @@ router.patch("/account", async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const { name, email, currentPassword, newPassword } = req.body;
+    const name = req.body?.name ?? req.body?.fullName;
+    const email = req.body?.email ?? req.body?.gmail;
+    const { currentPassword, newPassword } = req.body;
 
     if (name?.trim()) user.name = name.trim();
 

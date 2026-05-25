@@ -16,28 +16,30 @@ export default function TodayView({
 }) {
   const [showAdd, setShowAdd] = useState(false);
   const todayTasks = tasks.filter((t) => !t.done && t.dueDate && isToday(t.dueDate));
-  const todayDateStr = new Date().toLocaleDateString("en-US", {
+  const todayDateStr = new Date().toLocaleDateString("vi-VN", {
     weekday: "long",
     month: "long",
     day: "numeric",
   });
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  // Keep "today" in local timezone to avoid UTC date drift.
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
   return (
     <div className="list-area">
       <section className="today-view">
         <div className="list-header">
           <div>
-            <h2>Today</h2>
+            <h2>Hôm nay</h2>
             <p className="list-subheader">{todayDateStr}</p>
           </div>
           <span className="task-count">
-            {todayTasks.length} task{todayTasks.length !== 1 ? "s" : ""}
+            {todayTasks.length} công việc
           </span>
         </div>
 
-        {loading && <p className="data-state">Loading tasks…</p>}
+        {loading && <p className="data-state">Đang tải công việc…</p>}
         {!loading && error && <p className="data-state warning">{error}</p>}
 
         <div className="task-list">
@@ -45,7 +47,7 @@ export default function TodayView({
             <TaskItem key={t._id} task={t} onToggle={onToggle} onDelete={onDelete} />
           ))}
           {!loading && !error && todayTasks.length === 0 && (
-            <p className="view-empty-state">No tasks due today. Enjoy your day!</p>
+            <p className="view-empty-state">Hôm nay không có công việc đến hạn. Chúc bạn một ngày vui!</p>
           )}
         </div>
 
@@ -63,7 +65,7 @@ export default function TodayView({
           />
         ) : (
           <button className="ghost-add-task" type="button" onClick={() => setShowAdd(true)}>
-            <Plus size={14} /> Add task
+            <Plus size={14} /> Thêm công việc
           </button>
         )}
       </section>

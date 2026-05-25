@@ -70,13 +70,13 @@ export function useSettings(isAuthenticated) {
     });
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
-      throw new Error(data.message || "Export failed");
+      throw new Error(data.message || "Xuất dữ liệu thất bại");
     }
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "taskflow-backup.json";
+    a.download = "taskflow-sao-luu.json";
     a.click();
     URL.revokeObjectURL(url);
   }, []);

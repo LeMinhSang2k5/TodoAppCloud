@@ -3,7 +3,7 @@ import { Calendar as CalendarIcon, CheckCircle2, ChevronLeft, ChevronRight, Slid
 import { isToday as checkIsToday } from "../../utils/dates";
 
 const HOURS = Array.from({ length: 15 }, (_, i) => i + 8); // 8:00 to 22:00
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+const WEEKDAYS = ["T2", "T3", "T4", "T5", "T6"];
 
 export default function CalendarView({ tasks = [], onToggle, onDelete }) {
   const [currentWeekStart, setCurrentWeekStart] = useState(() => {
@@ -50,7 +50,7 @@ export default function CalendarView({ tasks = [], onToggle, onDelete }) {
 
   const monthYearLabel = useMemo(() => {
     const firstDay = weekDates[0];
-    return firstDay.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+    return firstDay.toLocaleDateString("vi-VN", { month: "long", year: "numeric" });
   }, [weekDates]);
 
   // Match tasks to weekdays & hours
@@ -128,7 +128,7 @@ export default function CalendarView({ tasks = [], onToggle, onDelete }) {
         {/* Header navigation */}
         <header className="calendar-week-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
           <div>
-            <h2 style={{ fontSize: "24px", fontWeight: "700", margin: 0 }}>Upcoming</h2>
+            <h2 style={{ fontSize: "24px", fontWeight: "700", margin: 0 }}>Sắp tới</h2>
             <p className="calendar-month-label" style={{ fontSize: "14px", color: "var(--muted)", margin: "4px 0 0" }}>{monthYearLabel}</p>
           </div>
           
@@ -137,7 +137,7 @@ export default function CalendarView({ tasks = [], onToggle, onDelete }) {
               <ChevronLeft size={16} />
             </button>
             <button className="calendar-today-btn" onClick={() => setCurrentWeekStart(new Date())} style={{ padding: "6px 12px", border: "1px solid var(--line)", borderRadius: "6px", fontSize: "12.5px", fontWeight: "600", cursor: "pointer", background: "transparent" }}>
-              Today
+              Hôm nay
             </button>
             <button className="icon-btn calendar-nav-btn" onClick={nextWeek} style={{ padding: "6px", border: "1px solid var(--line)", borderRadius: "6px" }}>
               <ChevronRight size={16} />
@@ -148,7 +148,7 @@ export default function CalendarView({ tasks = [], onToggle, onDelete }) {
               onClick={() => setShowLayoutPanel(!showLayoutPanel)}
               style={{ marginLeft: "12px" }}
             >
-              <Sliders size={14} /> Display
+              <Sliders size={14} /> Hiển thị
             </button>
           </div>
         </header>
@@ -191,7 +191,7 @@ export default function CalendarView({ tasks = [], onToggle, onDelete }) {
           {/* All day tasks banner row */}
           <div className="calendar-allday-row" style={{ display: "grid", gridTemplateColumns: "60px repeat(5, 1fr)", borderBottom: "1px solid var(--line)", background: "#fffefc", minHeight: "44px" }}>
             <div className="time-col-label" style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "var(--muted)", fontWeight: "600", borderRight: "1px solid var(--line)", textTransform: "uppercase" }}>
-              All day
+              Cả ngày
             </div>
             {mappedTasks.allDay.map((dayTasks, idx) => (
               <div key={idx} className="allday-cell" style={{ padding: "4px", borderRight: idx < 4 ? "1px solid var(--line)" : "none", display: "flex", flexDirection: "column", gap: "4px" }}>
@@ -285,7 +285,7 @@ export default function CalendarView({ tasks = [], onToggle, onDelete }) {
                         justifyContent: "space-between",
                         overflow: "hidden"
                       }}
-                      title={`${task.title} at ${timeLabel}`}
+                      title={`${task.title} lúc ${timeLabel}`}
                     >
                       <span style={{ fontSize: "11.5px", fontWeight: "600", color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                         {task.title}
@@ -352,27 +352,27 @@ export default function CalendarView({ tasks = [], onToggle, onDelete }) {
         >
           <div>
             <h3 style={{ fontSize: "14px", fontWeight: "700", margin: "0 0 12px", display: "flex", alignItems: "center", gap: "6px" }}>
-              Layout <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#eb8909" }} />
+              Bố cục <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#eb8909" }} />
             </h3>
             
             {/* View options selectors */}
             <div style={{ display: "flex", border: "1px solid var(--line)", borderRadius: "6px", overflow: "hidden", marginBottom: "12px" }}>
-              <button style={{ flex: 1, padding: "8px", fontSize: "12px", border: 0, fontWeight: "600", cursor: "pointer", background: "transparent", color: "var(--muted)" }}>List</button>
-              <button style={{ flex: 1, padding: "8px", fontSize: "12px", border: 0, fontWeight: "600", cursor: "pointer", background: "transparent", color: "var(--muted)" }}>Board</button>
-              <button style={{ flex: 1, padding: "8px", fontSize: "12px", border: 0, fontWeight: "700", cursor: "pointer", background: "#f0eeeb", color: "var(--text)" }}>Calendar</button>
+              <button style={{ flex: 1, padding: "8px", fontSize: "12px", border: 0, fontWeight: "600", cursor: "pointer", background: "transparent", color: "var(--muted)" }}>Danh sách</button>
+              <button style={{ flex: 1, padding: "8px", fontSize: "12px", border: 0, fontWeight: "600", cursor: "pointer", background: "transparent", color: "var(--muted)" }}>Bảng</button>
+              <button style={{ flex: 1, padding: "8px", fontSize: "12px", border: 0, fontWeight: "700", cursor: "pointer", background: "#f0eeeb", color: "var(--text)" }}>Lịch</button>
             </div>
             
             {/* Time frame switchers */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "13px", padding: "6px 0" }}>
-              <span style={{ fontWeight: "600", color: "var(--muted)" }}>Timeline</span>
+              <span style={{ fontWeight: "600", color: "var(--muted)" }}>Dòng thời gian</span>
               <div style={{ display: "flex", gap: "4px", background: "#f0eeeb", padding: "2px", borderRadius: "4px" }}>
-                <span style={{ fontSize: "11px", fontWeight: "700", background: "#fff", padding: "2px 8px", borderRadius: "3px" }}>Week</span>
-                <span style={{ fontSize: "11px", fontWeight: "600", color: "var(--muted)", padding: "2px 8px" }}>Month</span>
+                <span style={{ fontSize: "11px", fontWeight: "700", background: "#fff", padding: "2px 8px", borderRadius: "3px" }}>Tuần</span>
+                <span style={{ fontSize: "11px", fontWeight: "600", color: "var(--muted)", padding: "2px 8px" }}>Tháng</span>
               </div>
             </div>
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "13px", padding: "10px 0" }}>
-              <span style={{ fontWeight: "600", color: "var(--muted)" }}>Future occurrences</span>
+              <span style={{ fontWeight: "600", color: "var(--muted)" }}>Lịch lặp trong tương lai</span>
               <span style={{ width: "32px", height: "18px", borderRadius: "10px", background: "#ccc", display: "inline-block", position: "relative" }}>
                 <span style={{ width: "14px", height: "14px", borderRadius: "50%", background: "#fff", position: "absolute", top: "2px", left: "2px" }} />
               </span>
@@ -383,32 +383,32 @@ export default function CalendarView({ tasks = [], onToggle, onDelete }) {
 
           {/* Grouping and Sorting filters */}
           <div>
-            <h3 style={{ fontSize: "14px", fontWeight: "700", margin: "0 0 12px" }}>Sort &amp; Filter</h3>
+            <h3 style={{ fontSize: "14px", fontWeight: "700", margin: "0 0 12px" }}>Sắp xếp &amp; Bộ lọc</h3>
             
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <label style={{ fontSize: "11.5px", fontWeight: "600", color: "var(--muted)" }}>Sorting</label>
+                <label style={{ fontSize: "11.5px", fontWeight: "600", color: "var(--muted)" }}>Sắp xếp</label>
                 <select style={{ padding: "6px", border: "1px solid var(--line)", borderRadius: "4px", fontSize: "12.5px", background: "var(--panel)", color: "var(--text)" }}>
-                  <option>Smart</option>
-                  <option>Due Date</option>
-                  <option>Priority</option>
+                  <option>Thông minh</option>
+                  <option>Ngày đến hạn</option>
+                  <option>Mức ưu tiên</option>
                 </select>
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <label style={{ fontSize: "11.5px", fontWeight: "600", color: "var(--muted)" }}>Assignee</label>
+                <label style={{ fontSize: "11.5px", fontWeight: "600", color: "var(--muted)" }}>Người phụ trách</label>
                 <select style={{ padding: "6px", border: "1px solid var(--line)", borderRadius: "4px", fontSize: "12.5px", background: "var(--panel)", color: "var(--text)" }}>
-                  <option>Me and unassigned</option>
-                  <option>All team</option>
+                  <option>Tôi và chưa phân công</option>
+                  <option>Toàn bộ nhóm</option>
                 </select>
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <label style={{ fontSize: "11.5px", fontWeight: "600", color: "var(--muted)" }}>Priority</label>
+                <label style={{ fontSize: "11.5px", fontWeight: "600", color: "var(--muted)" }}>Mức ưu tiên</label>
                 <select style={{ padding: "6px", border: "1px solid var(--line)", borderRadius: "4px", fontSize: "12.5px", background: "var(--panel)", color: "var(--text)" }}>
-                  <option>All</option>
-                  <option>P1 - Urgent</option>
-                  <option>P2 - High</option>
+                  <option>Tất cả</option>
+                  <option>P1 - Khẩn cấp</option>
+                  <option>P2 - Cao</option>
                 </select>
               </div>
             </div>
@@ -416,7 +416,7 @@ export default function CalendarView({ tasks = [], onToggle, onDelete }) {
 
           <div style={{ marginTop: "auto" }}>
             <button style={{ width: "100%", padding: "8px", border: 0, background: "transparent", color: "#e44332", fontSize: "13px", fontWeight: "600", cursor: "pointer", textDecoration: "underline" }}>
-              Reset all
+              Đặt lại tất cả
             </button>
           </div>
         </aside>

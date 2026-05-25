@@ -35,7 +35,7 @@ function Logo() {
 
 function StarRow({ count = 5 }) {
   return (
-    <span className="hp-stars" aria-label={`${count} stars`}>
+    <span className="hp-stars" aria-label={`${count} sao`}>
       {"★".repeat(count)}
     </span>
   );
@@ -63,9 +63,9 @@ export default function HomePage({ onLogin, onStartForFree }) {
             ))}
           </nav>
           <div className="hp-header-actions">
-            <button className="hp-btn-ghost" type="button" onClick={onLogin}>Log in</button>
+            <button className="hp-btn-ghost" type="button" onClick={onLogin}>Đăng nhập</button>
             <button className="hp-btn-primary" type="button" onClick={onStartForFree}>
-              Start for free
+              Bắt đầu miễn phí
             </button>
           </div>
         </div>
@@ -78,50 +78,50 @@ export default function HomePage({ onLogin, onStartForFree }) {
           <div className="hp-hero-left">
             <div className="hp-badge">
               <span className="hp-badge-dot" />
-              Trusted by 50M+ professionals worldwide
+              Được tin dùng bởi hơn 50 triệu chuyên gia trên toàn cầu
             </div>
 
             <h1 className="hp-hero-h1">
-              Clarity,&nbsp;<span className="hp-hero-accent">finally.</span>
+              Rõ ràng,&nbsp;<span className="hp-hero-accent">cuối cùng cũng có.</span>
             </h1>
 
             <p className="hp-hero-sub">
-              The world&apos;s #1 task manager. Capture ideas, organize projects,
-              and finish what matters — every single day.
+              Trình quản lý công việc số 1 thế giới. Ghi lại ý tưởng, sắp xếp dự án
+              và hoàn thành những điều quan trọng - mỗi ngày.
             </p>
 
             <div className="hp-hero-actions">
               <button className="hp-cta-primary" type="button" onClick={onStartForFree}>
-                Start for free
+                Bắt đầu miễn phí
               </button>
               <button className="hp-cta-ghost" type="button" onClick={onLogin}>
-                Log in →
+                Đăng nhập →
               </button>
             </div>
 
             <div className="hp-rating-row">
               <div className="hp-rating-chip">
                 <StarRow />
-                <span>4.8 on App Store</span>
+                <span>4.8 trên App Store</span>
               </div>
               <div className="hp-rating-chip">
                 <StarRow />
-                <span>4.9 on Google Play</span>
+                <span>4.9 trên Google Play</span>
               </div>
             </div>
           </div>
 
           <div className="hp-hero-right">
             <div className="hp-hero-mockup">
-              <img src="/home-hero.png" alt="TaskFlow app preview" />
+              <img src="/home-hero.png" alt="Xem trước ứng dụng TaskFlow" />
               {/* Floating badge */}
               <div className="hp-float-badge hp-float-badge-1">
                 <CheckCircle2 size={14} color="#3aab7b" />
-                <span>3 tasks completed today</span>
+                <span>3 công việc đã hoàn thành hôm nay</span>
               </div>
               <div className="hp-float-badge hp-float-badge-2">
                 <Bell size={14} color="#eb8909" />
-                <span>Team standup · 9:00 AM</span>
+                <span>Họp nhóm nhanh · 9:00 sáng</span>
               </div>
             </div>
           </div>
@@ -130,7 +130,7 @@ export default function HomePage({ onLogin, onStartForFree }) {
 
       {/* ── Logo trust bar ───────────────────────────────────── */}
       <div className="hp-logos-bar">
-        <p className="hp-logos-label">Featured in</p>
+        <p className="hp-logos-label">Được nhắc đến trên</p>
         <div className="hp-logos-row">
           {homeLogos.map((logo) => (
             <span key={logo} className="hp-logo-item">{logo}</span>
@@ -152,7 +152,7 @@ export default function HomePage({ onLogin, onStartForFree }) {
                   </span>
                   <div>
                     <p className="hp-quote-name">{t.author}</p>
-                    <p className="hp-quote-role">{t.role} · via {t.source}</p>
+                    <p className="hp-quote-role">{t.role} · từ {t.source}</p>
                   </div>
                 </div>
               </article>
@@ -165,10 +165,10 @@ export default function HomePage({ onLogin, onStartForFree }) {
       <section className="hp-features">
         <div className="hp-section-inner">
           <div className="hp-section-header">
-            <p className="hp-eyebrow">Everything you need</p>
-            <h2>Built for the way you actually work</h2>
+            <p className="hp-eyebrow">Mọi thứ bạn cần</p>
+            <h2>Thiết kế theo đúng cách bạn làm việc</h2>
             <p className="hp-section-sub">
-              From quick personal to-dos to complex team projects, TaskFlow adapts to any workflow.
+              Từ việc cá nhân nhanh gọn đến dự án nhóm phức tạp, TaskFlow thích nghi với mọi quy trình làm việc.
             </p>
           </div>
           <div className="hp-features-grid">
@@ -207,10 +207,10 @@ export default function HomePage({ onLogin, onStartForFree }) {
       <section className="hp-workflow">
         <div className="hp-section-inner">
           <div className="hp-section-header">
-            <p className="hp-eyebrow">How it works</p>
-            <h2>From idea to done, in three steps</h2>
+            <p className="hp-eyebrow">Cách hoạt động</p>
+            <h2>Từ ý tưởng đến hoàn thành chỉ trong 3 bước</h2>
             <p className="hp-section-sub">
-              A simple system that scales from solo focus work to cross-team collaboration.
+              Một hệ thống đơn giản, mở rộng từ làm việc cá nhân đến cộng tác liên nhóm.
             </p>
           </div>
 
@@ -241,10 +241,10 @@ export default function HomePage({ onLogin, onStartForFree }) {
       <section className="hp-usecases">
         <div className="hp-section-inner">
           <div className="hp-section-header">
-            <p className="hp-eyebrow">For everyone</p>
-            <h2>Built for both solo and teams</h2>
+            <p className="hp-eyebrow">Dành cho mọi người</p>
+            <h2>Phù hợp cho cả cá nhân và nhóm</h2>
             <p className="hp-section-sub">
-              Start with personal planning and grow into a collaborative workspace whenever you&apos;re ready.
+              Bắt đầu với kế hoạch cá nhân và phát triển thành không gian cộng tác khi bạn sẵn sàng.
             </p>
           </div>
 
@@ -268,7 +268,7 @@ export default function HomePage({ onLogin, onStartForFree }) {
                 </ul>
                 <button className="hp-usecase-cta" type="button" onClick={onStartForFree}
                   style={{ color: uc.color, borderColor: uc.color }}>
-                  Get started →
+                  Bắt đầu ngay →
                 </button>
               </article>
             ))}
@@ -280,14 +280,14 @@ export default function HomePage({ onLogin, onStartForFree }) {
       <section className="hp-cta-band">
         <div className="hp-cta-band-bg" aria-hidden="true" />
         <div className="hp-cta-band-inner">
-          <h2>Ready to turn planning into progress?</h2>
-          <p>Create your workspace, invite your team, and ship your next milestone faster.</p>
+          <h2>Sẵn sàng biến kế hoạch thành kết quả?</h2>
+          <p>Tạo không gian làm việc, mời nhóm của bạn và chạm mốc tiếp theo nhanh hơn.</p>
           <div className="hp-cta-band-actions">
             <button className="hp-cta-band-primary" type="button" onClick={onStartForFree}>
-              Start for free — no credit card
+              Bắt đầu miễn phí - không cần thẻ tín dụng
             </button>
             <button className="hp-cta-band-ghost" type="button" onClick={onLogin}>
-              Already have an account? Log in →
+              Đã có tài khoản? Đăng nhập →
             </button>
           </div>
         </div>
@@ -299,7 +299,7 @@ export default function HomePage({ onLogin, onStartForFree }) {
           <div className="hp-footer-brand">
             <Logo />
             <p className="hp-footer-tagline">
-              The world&apos;s #1 task manager.<br />Simple. Powerful. Free to start.
+              Trình quản lý công việc số 1 thế giới.<br />Đơn giản. Mạnh mẽ. Bắt đầu miễn phí.
             </p>
             <div className="hp-footer-social">
               {homeFooterSocial.map((item) => (
@@ -325,11 +325,11 @@ export default function HomePage({ onLogin, onStartForFree }) {
         </div>
 
         <div className="hp-footer-bottom">
-          <p>© {new Date().getFullYear()} TaskFlow. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} TaskFlow. Bảo lưu mọi quyền.</p>
           <div className="hp-footer-bottom-links">
-            <a href="#privacy">Privacy</a>
-            <a href="#terms">Terms</a>
-            <a href="#cookies">Cookies</a>
+            <a href="#privacy">Quyền riêng tư</a>
+            <a href="#terms">Điều khoản</a>
+            <a href="#cookies">Cookie</a>
           </div>
         </div>
       </footer>

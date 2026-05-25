@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Calendar, LayoutGrid, List, X } from "lucide-react";
 
 const COLOR_OPTIONS = [
-  { name: "Violet", hex: "#7b68ee" },
-  { name: "Red", hex: "#e44332" },
-  { name: "Sky", hex: "#4a9fe5" },
-  { name: "Green", hex: "#3aab7b" },
-  { name: "Orange", hex: "#eb8909" },
-  { name: "Yellow", hex: "#ffc107" },
-  { name: "Pink", hex: "#e91e63" },
-  { name: "Teal", hex: "#009688" },
+  { name: "Violet", label: "Tím", hex: "#7b68ee" },
+  { name: "Red", label: "Đỏ", hex: "#e44332" },
+  { name: "Sky", label: "Xanh da trời", hex: "#4a9fe5" },
+  { name: "Green", label: "Xanh lá", hex: "#3aab7b" },
+  { name: "Orange", label: "Cam", hex: "#eb8909" },
+  { name: "Yellow", label: "Vàng", hex: "#ffc107" },
+  { name: "Pink", label: "Hồng", hex: "#e91e63" },
+  { name: "Teal", label: "Xanh ngọc", hex: "#009688" },
 ];
 
 export default function ProjectModal({ isOpen, onClose, onAdd, folders = [], defaultType = "personal", defaultFolderId = "" }) {
@@ -41,7 +41,7 @@ export default function ProjectModal({ isOpen, onClose, onAdd, folders = [], def
   }
 
   async function handleSubmit() {
-    if (!name.trim()) { setError("Project name is required"); return; }
+    if (!name.trim()) { setError("Tên dự án là bắt buộc"); return; }
     setSubmitting(true);
     setError("");
     try {
@@ -49,7 +49,7 @@ export default function ProjectModal({ isOpen, onClose, onAdd, folders = [], def
       resetForm();
       onClose();
     } catch (err) {
-      setError(err.message || "Failed to create project");
+      setError(err.message || "Tạo dự án thất bại");
     } finally {
       setSubmitting(false);
     }
@@ -63,12 +63,12 @@ export default function ProjectModal({ isOpen, onClose, onAdd, folders = [], def
         className="modal project-modal"
         role="dialog"
         aria-modal="true"
-        aria-label="Add project"
+        aria-label="Thêm dự án"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h3>Add project</h3>
-          <button className="icon-btn" type="button" onClick={handleClose} aria-label="Close">
+          <h3>Thêm dự án</h3>
+          <button className="icon-btn" type="button" onClick={handleClose} aria-label="Đóng">
             <X size={18} />
           </button>
         </div>
@@ -76,11 +76,11 @@ export default function ProjectModal({ isOpen, onClose, onAdd, folders = [], def
         {error && <p className="project-modal-error">{error}</p>}
 
         <label className="field-label">
-          Name
+          Tên
           <input
             type="text"
             className="field-input"
-            placeholder="Enter project name"
+            placeholder="Nhập tên dự án"
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoFocus
@@ -89,30 +89,30 @@ export default function ProjectModal({ isOpen, onClose, onAdd, folders = [], def
         </label>
 
         <label className="field-label">
-          Color
+          Màu sắc
           <div className="color-select-wrap">
             <span className="color-dot" style={{ background: selectedColor.hex }} />
             <select className="field-select" value={color} onChange={(e) => setColor(e.target.value)}>
               {COLOR_OPTIONS.map((c) => (
-                <option key={c.name} value={c.name}>{c.name}</option>
+                <option key={c.name} value={c.name}>{c.label}</option>
               ))}
             </select>
           </div>
         </label>
 
         <label className="field-label">
-          Type
+          Loại
           <select className="field-select" value={type} onChange={(e) => { setType(e.target.value); setFolderId(""); }}>
-            <option value="personal">Personal</option>
-            <option value="team">Team</option>
+            <option value="personal">Cá nhân</option>
+            <option value="team">Nhóm</option>
           </select>
         </label>
 
         {filteredFolders.length > 0 && (
           <label className="field-label">
-            Folder (optional)
+            Thư mục (không bắt buộc)
             <select className="field-select" value={folderId} onChange={(e) => setFolderId(e.target.value)}>
-              <option value="">No folder</option>
+              <option value="">Không có thư mục</option>
               {filteredFolders.map((f) => (
                 <option key={f._id} value={f._id}>{f.name}</option>
               ))}
@@ -120,23 +120,23 @@ export default function ProjectModal({ isOpen, onClose, onAdd, folders = [], def
           </label>
         )}
 
-        <p className="field-label field-label-tight">View</p>
+        <p className="field-label field-label-tight">Chế độ xem</p>
         <div className="layout-picker">
           <button className={`layout-opt ${view === "list" ? "active" : ""}`} type="button" onClick={() => setView("list")}>
-            <List size={16} /> List
+            <List size={16} /> Danh sách
           </button>
           <button className={`layout-opt ${view === "board" ? "active" : ""}`} type="button" onClick={() => setView("board")}>
-            <LayoutGrid size={16} /> Board
+            <LayoutGrid size={16} /> Bảng
           </button>
           <button className={`layout-opt ${view === "calendar" ? "active" : ""}`} type="button" onClick={() => setView("calendar")}>
-            <Calendar size={16} /> Calendar
+            <Calendar size={16} /> Lịch
           </button>
         </div>
 
         <div className="modal-footer">
-          <button type="button" onClick={handleClose}>Cancel</button>
+          <button type="button" onClick={handleClose}>Hủy</button>
           <button className="btn-primary" type="button" onClick={handleSubmit} disabled={submitting || !name.trim()}>
-            {submitting ? "Adding…" : "Add"}
+            {submitting ? "Đang thêm…" : "Thêm"}
           </button>
         </div>
       </section>

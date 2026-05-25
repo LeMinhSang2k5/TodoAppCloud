@@ -20,11 +20,11 @@ import {
 import Avatar from "../common/Avatar";
 
 const NAV_ITEMS = [
-  { id: "inbox",     label: "Inbox",           Icon: Inbox },
-  { id: "today",     label: "Today",           Icon: Calendar },
-  { id: "upcoming",  label: "Upcoming",        Icon: Clock },
-  { id: "filters",   label: "Filters & Labels", Icon: Filter },
-  { id: "completed", label: "Completed",       Icon: CheckCircle2 },
+  { id: "inbox",     label: "Hộp thư đến",     Icon: Inbox },
+  { id: "today",     label: "Hôm nay",         Icon: Calendar },
+  { id: "upcoming",  label: "Sắp tới",         Icon: Clock },
+  { id: "filters",   label: "Bộ lọc & Nhãn",   Icon: Filter },
+  { id: "completed", label: "Đã hoàn thành",   Icon: CheckCircle2 },
 ];
 
 /* ─── Small folder row in sidebar ─────────────────────────── */
@@ -46,7 +46,7 @@ function FolderRow({ folder, projects, activeProjectId, onProjectSelect, onDelet
           <button
             className="icon-btn"
             type="button"
-            title="Add project to folder"
+            title="Thêm dự án vào thư mục"
             onClick={() => onAddProjectInFolder(folder._id, folder.type)}
           >
             <Plus size={12} />
@@ -54,7 +54,7 @@ function FolderRow({ folder, projects, activeProjectId, onProjectSelect, onDelet
           <button
             className="icon-btn"
             type="button"
-            title="Delete folder"
+            title="Xóa thư mục"
             onClick={() => onDeleteFolder(folder._id)}
           >
             <Trash2 size={12} />
@@ -75,7 +75,7 @@ function FolderRow({ folder, projects, activeProjectId, onProjectSelect, onDelet
             />
           ))}
           {folderProjects.length === 0 && (
-            <p className="sb-folder-empty">No projects yet</p>
+            <p className="sb-folder-empty">Chưa có dự án</p>
           )}
         </div>
       )}
@@ -99,7 +99,7 @@ function ProjectRow({ project, activeProjectId, onProjectSelect, onDeleteProject
           className="project-delete-icon"
           role="button"
           tabIndex={0}
-          aria-label={`Delete ${project.name}`}
+          aria-label={`Xóa ${project.name}`}
           onClick={(e) => { e.stopPropagation(); onDeleteProject(project._id); }}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") { e.stopPropagation(); onDeleteProject(project._id); }
@@ -128,10 +128,10 @@ function ProjectSection({ label, Icon, projects, folders, activeProjectId, onPro
         <Icon size={13} className="sb-section-icon" />
         <span className="sb-section-label">{label}</span>
         <span className="sb-section-actions" onClick={(e) => e.stopPropagation()}>
-          <button className="icon-btn" type="button" title="Add folder" onClick={onAddFolder}>
+          <button className="icon-btn" type="button" title="Thêm thư mục" onClick={onAddFolder}>
             <FolderOpen size={13} />
           </button>
-          <button className="icon-btn" type="button" title="Add project" onClick={() => onAddProject()}>
+          <button className="icon-btn" type="button" title="Thêm dự án" onClick={() => onAddProject()}>
             <Plus size={13} />
           </button>
         </span>
@@ -165,7 +165,7 @@ function ProjectSection({ label, Icon, projects, folders, activeProjectId, onPro
           ))}
 
           {folders.length === 0 && rootProjects.length === 0 && (
-            <p className="no-projects-text">No projects yet</p>
+            <p className="no-projects-text">Chưa có dự án</p>
           )}
         </div>
       )}
@@ -206,19 +206,19 @@ export default function Sidebar({
       <div className="profile-row">
         <button className="profile-btn" type="button">
           <Avatar initial={initial} color="#58bbb3" size={30} />
-          <span className="profile-name">{user?.name || "User"}</span>
+          <span className="profile-name">{user?.name || "Người dùng"}</span>
           <ChevronDown size={14} className="profile-chevron" />
         </button>
         <div className="profile-actions">
-          <button className="icon-btn notif-btn" type="button" aria-label="Notifications">
+          <button className="icon-btn notif-btn" type="button" aria-label="Thông báo">
             <Bell size={16} />
             <span className="notif-dot" />
           </button>
-          <button className="icon-btn" type="button" aria-label="Toggle layout">
+          <button className="icon-btn" type="button" aria-label="Đổi bố cục">
             <LayoutGrid size={16} />
           </button>
           {onLogout && (
-            <button className="icon-btn" type="button" aria-label="Log out" title="Log out" onClick={onLogout}>
+            <button className="icon-btn" type="button" aria-label="Đăng xuất" title="Đăng xuất" onClick={onLogout}>
               <LogOut size={16} />
             </button>
           )}
@@ -228,7 +228,7 @@ export default function Sidebar({
       {/* Add task */}
       <button className="add-task-btn" type="button">
         <span className="add-icon"><Plus size={18} strokeWidth={3} /></span>
-        Add task
+        Thêm công việc
       </button>
 
       {/* Navigation */}
@@ -260,13 +260,13 @@ export default function Sidebar({
           onClick={() => onProjectSelect?.(null)}
         >
           <span className="project-color-dot" style={{ background: "#8b8b8b" }} />
-          <span className="project-item-name">All tasks</span>
+          <span className="project-item-name">Tất cả công việc</span>
         </button>
       </div>
 
       {/* Personal projects section */}
       <ProjectSection
-        label="My Projects"
+        label="Dự án của tôi"
         Icon={Globe}
         projects={personalProjects}
         folders={personalFolders}
@@ -281,7 +281,7 @@ export default function Sidebar({
 
       {/* Team projects section */}
       <ProjectSection
-        label={workspaceName || "Team"}
+        label={workspaceName || "Nhóm"}
         Icon={Users}
         projects={teamProjects}
         folders={teamFolders}
@@ -296,12 +296,12 @@ export default function Sidebar({
 
       <button className="browse-all-btn" type="button">
         <Globe size={14} />
-        Browse all projects
+        Xem tất cả dự án
       </button>
 
       <button className="help-btn" type="button">
         <HelpCircle size={15} />
-        Help &amp; resources
+        Trợ giúp &amp; tài nguyên
       </button>
     </aside>
   );

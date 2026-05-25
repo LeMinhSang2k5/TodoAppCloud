@@ -14,13 +14,13 @@ export default function ListView({
     <div className="list-area">
       <section className="today-view">
         <div className="list-header">
-          <h2>Today</h2>
+          <h2>Hôm nay</h2>
           <span className="task-count">
-            {pendingCount} task{pendingCount !== 1 ? "s" : ""}
+            {pendingCount} công việc
           </span>
         </div>
 
-        {isLoading && <p className="data-state">Loading tasks from MongoDB...</p>}
+        {isLoading && <p className="data-state">Đang tải công việc từ MongoDB...</p>}
         {!isLoading && errorMessage && <p className="data-state warning">{errorMessage}</p>}
 
         <div className="task-list">
@@ -58,7 +58,7 @@ export default function ListView({
         </div>
 
         <button className="ghost-add-task" type="button">
-          <Plus size={14} /> Add task
+          <Plus size={14} /> Thêm công việc
         </button>
       </section>
     </div>

@@ -15,7 +15,7 @@ export default function BoardCard({ task, onToggle, onDelete }) {
           className={`card-check ${overdue ? "check-overdue" : ""} ${task.done ? "check-done" : ""}`}
           style={{ borderColor: PRIORITY_BORDER[task.priority || 4] }}
           onClick={() => onToggle(task._id)}
-          aria-label="Toggle complete"
+          aria-label="Đánh dấu hoàn thành"
           type="button"
         />
         <p className="card-title">{task.title}</p>

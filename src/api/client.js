@@ -25,7 +25,7 @@ async function request(path, options = {}) {
   }
 
   if (!res.ok) {
-    const err = new Error(data.message || "Request failed");
+    const err = new Error(data.message || "Yêu cầu thất bại");
     err.status = res.status;
     throw err;
   }

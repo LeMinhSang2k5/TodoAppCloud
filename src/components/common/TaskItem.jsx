@@ -13,7 +13,14 @@ export default function TaskItem({ task, onToggle, onDelete }) {
     task.dueDate && isPastDate(task.dueDate) && !isToday(task.dueDate) && !task.done;
 
   // Determine if this task is a special scheduled event/meeting (e.g., has a time slot)
-  const isScheduledMeeting = task.dueTime && (task.title.toLowerCase().includes("standup") || task.title.toLowerCase().includes("meeting") || task.title.toLowerCase().includes("proposal") || task.dueTime.includes("-"));
+  const isScheduledMeeting = task.dueTime && (
+    task.title.toLowerCase().includes("standup") ||
+    task.title.toLowerCase().includes("meeting") ||
+    task.title.toLowerCase().includes("proposal") ||
+    task.title.toLowerCase().includes("họp") ||
+    task.title.toLowerCase().includes("đề xuất") ||
+    task.dueTime.includes("-")
+  );
 
   if (isScheduledMeeting && !task.done) {
     return (
@@ -58,6 +65,7 @@ export default function TaskItem({ task, onToggle, onDelete }) {
   const subtasksText = hasSubtasks ? "0/1" : null;
   const commentsCount = task.title === "Send a redesign proposal" ? 2 : null;
   const isInboxLocked = task.project === "Inbox" || !task.project;
+  const projectLabel = task.project === "Inbox" ? "Hộp thư đến" : task.project;
 
   return (
     <div
@@ -78,7 +86,7 @@ export default function TaskItem({ task, onToggle, onDelete }) {
           flexShrink: 0
         }}
         onClick={() => onToggle(task._id)}
-        aria-label="Toggle complete"
+        aria-label="Đánh dấu hoàn thành"
         type="button"
       />
 
@@ -117,7 +125,7 @@ export default function TaskItem({ task, onToggle, onDelete }) {
 
           {task.project && (
             <span className="meta-chip" style={{ display: "inline-flex", alignItems: "center", gap: "3px", fontSize: "11px", color: "#e91e63", background: "rgba(233, 30, 99, 0.05)", padding: "2px 8px", borderRadius: "12px", fontWeight: "600", marginLeft: "auto" }}>
-              <Hash size={10} /> {task.project}
+              <Hash size={10} /> {projectLabel}
               {isInboxLocked && <Lock size={9} style={{ marginLeft: "2px", opacity: 0.7 }} />}
             </span>
           )}
@@ -135,7 +143,7 @@ export default function TaskItem({ task, onToggle, onDelete }) {
         <button
           className="task-delete-btn"
           type="button"
-          aria-label="Delete task"
+          aria-label="Xóa công việc"
           onClick={() => onDelete(task._id)}
           style={{ marginLeft: "8px", alignSelf: "center", background: "transparent", border: 0, cursor: "pointer", color: "var(--muted)" }}
         >

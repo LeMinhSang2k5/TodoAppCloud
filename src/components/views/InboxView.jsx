@@ -25,13 +25,13 @@ export default function InboxView({
     <div className="list-area">
       <section className="today-view">
         <div className="list-header">
-          <h2>{projectMode ? projectName : "Inbox"}</h2>
+          <h2>{projectMode ? projectName : "Hộp thư đến"}</h2>
           <span className="task-count">
-            {inboxTasks.length} task{inboxTasks.length !== 1 ? "s" : ""}
+            {inboxTasks.length} công việc
           </span>
         </div>
 
-        {loading && <p className="data-state">Loading tasks…</p>}
+        {loading && <p className="data-state">Đang tải công việc…</p>}
         {!loading && error && <p className="data-state warning">{error}</p>}
 
         <div className="task-list">
@@ -39,7 +39,7 @@ export default function InboxView({
             <TaskItem key={t._id} task={t} onToggle={onToggle} onDelete={onDelete} />
           ))}
           {!loading && !error && inboxTasks.length === 0 && (
-            <p className="view-empty-state">Your inbox is empty. Add a task to get started!</p>
+            <p className="view-empty-state">Hộp thư đến đang trống. Hãy thêm công việc để bắt đầu!</p>
           )}
         </div>
 
@@ -57,7 +57,7 @@ export default function InboxView({
           />
         ) : (
           <button className="ghost-add-task" type="button" onClick={() => setShowAdd(true)}>
-            <Plus size={14} /> Add task
+            <Plus size={14} /> Thêm công việc
           </button>
         )}
       </section>

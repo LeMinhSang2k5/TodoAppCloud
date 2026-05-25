@@ -1,28 +1,28 @@
-export const homeNavLinks = ["Features", "For Teams", "Pricing", "Resources"];
+export const homeNavLinks = ["Tính năng", "Dành cho nhóm", "Bảng giá", "Tài nguyên"];
 
 export const homeTestimonials = [
   {
-    quote: "Simple, straightforward, and super powerful. It replaced three tools we used to juggle.",
+    quote: "Đơn giản, dễ dùng nhưng cực kỳ mạnh mẽ. Ứng dụng này đã thay thế ba công cụ mà chúng tôi từng phải dùng song song.",
     author: "Sarah K.",
-    role: "Product Manager",
+    role: "Quản lý sản phẩm",
     initials: "SK",
     color: "#4a9fe5",
     stars: 5,
     source: "App Store",
   },
   {
-    quote: "The best to-do list app on the market. My team's delivery time improved by 30%.",
+    quote: "Ứng dụng quản lý việc cần làm tốt nhất mình từng dùng. Tốc độ giao việc của nhóm mình tăng 30%.",
     author: "Marcus L.",
-    role: "Engineering Lead",
+    role: "Trưởng nhóm kỹ thuật",
     initials: "ML",
     color: "#3aab7b",
     stars: 5,
     source: "G2",
   },
   {
-    quote: "Nothing short of stellar. I finally have clarity on what matters every single day.",
+    quote: "Thật sự xuất sắc. Cuối cùng tôi đã rõ ràng mỗi ngày mình cần tập trung vào điều gì.",
     author: "Priya D.",
-    role: "Freelance Designer",
+    role: "Nhà thiết kế tự do",
     initials: "PD",
     color: "#eb8909",
     stars: 5,
@@ -37,57 +37,57 @@ export const homeFeatureCards = [
     icon: "Zap",
     iconBg: "#fff4e5",
     iconColor: "#eb8909",
-    title: "Capture ideas in seconds",
+    title: "Ghi lại ý tưởng trong vài giây",
     description:
-      "Add tasks instantly with smart date parsing. Works from desktop, mobile, or even email — never lose an idea again.",
+      "Thêm công việc tức thì với khả năng nhận diện ngày thông minh. Hoạt động trên máy tính, điện thoại hoặc cả email - không bỏ lỡ ý tưởng nào nữa.",
   },
   {
     icon: "LayoutGrid",
     iconBg: "#eef6ff",
     iconColor: "#4a9fe5",
-    title: "Plan your week with clarity",
+    title: "Lên kế hoạch tuần rõ ràng",
     description:
-      "Switch between list, board, and calendar to stay focused. See exactly what needs to happen today.",
+      "Chuyển đổi giữa danh sách, bảng và lịch để luôn tập trung. Nhìn ngay những việc cần làm trong hôm nay.",
   },
   {
     icon: "Users",
     iconBg: "#edfff6",
     iconColor: "#3aab7b",
-    title: "Collaborate with your team",
+    title: "Cộng tác cùng nhóm",
     description:
-      "Assign tasks, track progress, and keep everyone aligned. One workspace for the entire team.",
+      "Phân công công việc, theo dõi tiến độ và giúp mọi người luôn đồng bộ. Một không gian làm việc cho toàn bộ nhóm.",
   },
   {
     icon: "Bell",
     iconBg: "#fff0f0",
     iconColor: "#e44332",
-    title: "Smart reminders & priorities",
+    title: "Nhắc việc & ưu tiên thông minh",
     description:
-      "Set due dates, recurring schedules, and priority levels so nothing important ever slips through the cracks.",
+      "Đặt ngày hạn, lịch lặp và mức ưu tiên để không bỏ sót bất kỳ việc quan trọng nào.",
   },
   {
     icon: "TrendingUp",
     iconBg: "#f3f0ff",
     iconColor: "#7b68ee",
-    title: "Track your productivity",
+    title: "Theo dõi năng suất",
     description:
-      "Visual reports and streaks show your completion rate over time so you can keep improving consistently.",
+      "Báo cáo trực quan và chuỗi ngày hoàn thành giúp bạn theo dõi tiến độ theo thời gian để cải thiện liên tục.",
   },
   {
     icon: "Globe",
     iconBg: "#f0fdf9",
     iconColor: "#009688",
-    title: "Works everywhere you do",
+    title: "Làm việc ở mọi nơi",
     description:
-      "Native apps for iOS, Android, Mac, Windows, and Web — your tasks are always in sync across devices.",
+      "Ứng dụng cho iOS, Android, Mac, Windows và Web - công việc của bạn luôn được đồng bộ trên mọi thiết bị.",
   },
 ];
 
 export const homeStats = [
-  { value: "50M+", label: "Users worldwide", sub: "And growing every day" },
-  { value: "1B+", label: "Tasks completed", sub: "Monthly across all users" },
-  { value: "190+", label: "Countries", sub: "With active teams onboard" },
-  { value: "99.99%", label: "Uptime", sub: "Reliable when it matters" },
+  { value: "50M+", label: "Người dùng toàn cầu", sub: "Và tiếp tục tăng mỗi ngày" },
+  { value: "1B+", label: "Công việc đã hoàn thành", sub: "Mỗi tháng trên toàn hệ thống" },
+  { value: "190+", label: "Quốc gia", sub: "Có nhóm đang hoạt động" },
+  { value: "99.99%", label: "Thời gian hoạt động", sub: "Ổn định khi bạn cần nhất" },
 ];
 
 export const homeWorkflowSteps = [
@@ -96,73 +96,73 @@ export const homeWorkflowSteps = [
     iconBg: "#fff4e5",
     iconColor: "#eb8909",
     step: "01",
-    title: "Capture everything",
+    title: "Ghi lại mọi thứ",
     description:
-      "Brain-dump ideas from any device. Use natural language like \u201cBuy milk tomorrow at 9am\u201d and we handle the rest.",
+      "Xả ý tưởng từ bất kỳ thiết bị nào. Dùng ngôn ngữ tự nhiên như \"Mua sữa ngày mai lúc 9 giờ\" và phần còn lại để TaskFlow xử lý.",
   },
   {
     icon: "Filter",
     iconBg: "#eef6ff",
     iconColor: "#4a9fe5",
     step: "02",
-    title: "Organize with clarity",
+    title: "Sắp xếp rõ ràng",
     description:
-      "Sort into projects, assign labels and priorities. Each day has a clear, focused action list — no more guessing.",
+      "Phân loại theo dự án, gắn nhãn và mức ưu tiên. Mỗi ngày đều có danh sách hành động rõ ràng, không còn mơ hồ.",
   },
   {
     icon: "CheckCircle2",
     iconBg: "#edfff6",
     iconColor: "#3aab7b",
     step: "03",
-    title: "Execute & track progress",
+    title: "Thực thi & theo dõi tiến độ",
     description:
-      "Cross things off in list, board, or calendar view. Watch your streak grow and celebrate every win.",
+      "Hoàn tất công việc ở chế độ danh sách, bảng hoặc lịch. Theo dõi chuỗi ngày và ăn mừng từng thành quả.",
   },
 ];
 
 export const homeUseCases = [
   {
     emoji: "👤",
-    title: "Personal productivity",
-    subtitle: "Stay on top of life",
+    title: "Năng suất cá nhân",
+    subtitle: "Luôn kiểm soát cuộc sống",
     color: "#4a9fe5",
     points: [
-      "Plan your week in under 5 minutes",
-      "Build habits with recurring tasks",
-      "Reduce mental overload and stress",
-      "Capture ideas before they disappear",
+      "Lên kế hoạch tuần trong chưa đầy 5 phút",
+      "Xây dựng thói quen với công việc lặp",
+      "Giảm quá tải tinh thần và căng thẳng",
+      "Ghi lại ý tưởng trước khi quên",
     ],
   },
   {
     emoji: "🤝",
-    title: "Teams & projects",
-    subtitle: "Ship faster, together",
+    title: "Nhóm & dự án",
+    subtitle: "Ra kết quả nhanh hơn, cùng nhau",
     color: "#3aab7b",
     points: [
-      "Assign ownership with one click",
-      "Centralize deadlines and milestones",
-      "Review team progress in real-time",
-      "Keep cross-functional work aligned",
+      "Phân công người phụ trách chỉ với một cú nhấp",
+      "Tập trung deadline và cột mốc về một nơi",
+      "Theo dõi tiến độ nhóm theo thời gian thực",
+      "Đồng bộ công việc liên phòng ban",
     ],
   },
 ];
 
 export const homeFooterColumns = [
   {
-    title: "Product",
-    links: ["How it works", "Features", "Pricing", "Templates", "Changelog"],
+    title: "Sản phẩm",
+    links: ["Cách hoạt động", "Tính năng", "Bảng giá", "Mẫu", "Nhật ký cập nhật"],
   },
   {
-    title: "Resources",
-    links: ["Help center", "Productivity methods", "Integrations", "Download apps", "Blog"],
+    title: "Tài nguyên",
+    links: ["Trung tâm trợ giúp", "Phương pháp năng suất", "Tích hợp", "Tải ứng dụng", "Bài viết"],
   },
   {
-    title: "Company",
-    links: ["About us", "Careers", "Press", "Partners", "Contact"],
+    title: "Công ty",
+    links: ["Về chúng tôi", "Tuyển dụng", "Báo chí", "Đối tác", "Liên hệ"],
   },
   {
-    title: "Legal",
-    links: ["Security", "Privacy policy", "Terms of service", "Cookie settings"],
+    title: "Pháp lý",
+    links: ["Bảo mật", "Chính sách riêng tư", "Điều khoản dịch vụ", "Cài đặt cookie"],
   },
 ];
 

@@ -4,9 +4,11 @@ import AddTaskInline from "../common/AddTaskInline";
 import { formatDate, isToday } from "../../utils/dates";
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
-const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"];
+const DAY_LABELS = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+const MONTH_NAMES = [
+  "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+  "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",
+];
 
 function startOfWeek(date, weekStartsOn = "monday") {
   const d = new Date(date);
@@ -143,11 +145,11 @@ export default function UpcomingView({
       {/* ── Toolbar ─────────────────────────────────────────── */}
       <div className="cal-toolbar">
         <div className="cal-toolbar-left">
-          <button className="cal-today-btn" onClick={goToday} type="button">Today</button>
-          <button className="cal-nav-btn" onClick={prevWeek} type="button" aria-label="Previous week">
+          <button className="cal-today-btn" onClick={goToday} type="button">Hôm nay</button>
+          <button className="cal-nav-btn" onClick={prevWeek} type="button" aria-label="Tuần trước">
             <ChevronLeft size={16} />
           </button>
-          <button className="cal-nav-btn" onClick={nextWeek} type="button" aria-label="Next week">
+          <button className="cal-nav-btn" onClick={nextWeek} type="button" aria-label="Tuần sau">
             <ChevronRight size={16} />
           </button>
           <span className="cal-header-label">{headerLabel}</span>
@@ -157,16 +159,16 @@ export default function UpcomingView({
             className={`cal-layout-btn ${viewLayout === "week" ? "active" : ""}`}
             onClick={() => setViewLayout("week")}
             type="button"
-          >Week</button>
+          >Tuần</button>
           <button
             className={`cal-layout-btn ${viewLayout === "month" ? "active" : ""}`}
             onClick={() => setViewLayout("month")}
             type="button"
-          >Month</button>
+          >Tháng</button>
         </div>
       </div>
 
-      {loading && <p className="data-state">Loading tasks…</p>}
+      {loading && <p className="data-state">Đang tải công việc…</p>}
       {!loading && error && <p className="data-state warning">{error}</p>}
 
       {/* ── Calendar grid ───────────────────────────────────── */}
@@ -187,7 +189,7 @@ export default function UpcomingView({
 
         {/* All-day row */}
         <div className="cal-allday-row">
-          <div className="cal-time-gutter cal-allday-label">All day</div>
+          <div className="cal-time-gutter cal-allday-label">Cả ngày</div>
           {days.map((day, i) => {
             const key = day.toDateString();
             const dayAllTasks = allDayTasks[key] || [];
@@ -208,7 +210,7 @@ export default function UpcomingView({
                 <button
                   className="cal-add-in-day"
                   type="button"
-                  title="Add task"
+                  title="Thêm công việc"
                   onClick={() => setAddingDay(day.toISOString().split("T")[0])}
                 >
                   <Plus size={11} />
