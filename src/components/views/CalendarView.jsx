@@ -1,426 +1,495 @@
-import React, { useMemo, useState, useEffect } from "react";
-import { Calendar as CalendarIcon, CheckCircle2, ChevronLeft, ChevronRight, Sliders, User, Info } from "lucide-react";
-import { isToday as checkIsToday } from "../../utils/dates";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, Plus, RotateCcw, Sliders, Trash2 } from "lucide-react";
+import AddTaskInline from "../common/AddTaskInline";
 
-const HOURS = Array.from({ length: 15 }, (_, i) => i + 8); // 8:00 to 22:00
-const WEEKDAYS = ["T2", "T3", "T4", "T5", "T6"];
+const HOURS = Array.from({ length: 24 }, (_, i) => i);
+const HOUR_HEIGHT = 60; // px per hour
+const DAY_LABELS = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+const MONTH_NAMES = [
+  "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+  "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",
+];
 
-export default function CalendarView({ tasks = [], onToggle, onDelete }) {
-  const [currentWeekStart, setCurrentWeekStart] = useState(() => {
+const PRIORITY_OPTIONS = [
+  { value: 0, label: "Tất cả mức ưu tiên" },
+  { value: 1, label: "P1 - Khẩn cấp" },
+  { value: 2, label: "P2 - Cao" },
+  { value: 3, label: "P3 - Trung bình" },
+  { value: 4, label: "P4 - Thấp" },
+];
+
+const TASK_COLORS = [
+  "#4a9fe5", "#3aab7b", "#e44332", "#7b68ee",
+  "#eb8909", "#009688", "#e91e63", "#246fe0",
+];
+function taskColor(idx) {
+  return TASK_COLORS[idx % TASK_COLORS.length];
+}
+
+function startOfWeek(date, weekStartsOn = "monday") {
+  const d = new Date(date);
+  const day = d.getDay();
+  if (weekStartsOn === "monday") {
+    const offset = day === 0 ? -6 : 1 - day;
+    d.setDate(d.getDate() + offset);
+  } else {
+    d.setDate(d.getDate() - day);
+  }
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function addDays(date, n) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+
+function isSameDay(a, b) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+function parseLocalDate(dateInput) {
+  if (!dateInput) return null;
+  const d = new Date(dateInput);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function minutesFromMidnight(timeStr) {
+  if (!timeStr) return null;
+  const [h, m] = String(timeStr).split(":").map(Number);
+  if (isNaN(h)) return null;
+  return h * 60 + (m || 0);
+}
+
+export default function CalendarView({
+  tasks = [],
+  onToggle,
+  onDelete,
+  onAdd,
+  projects = [],
+  activeProject = null,
+  weekStartsOn = "monday",
+  showWeekends: showWeekendsSetting = true,
+}) {
+  const today = useMemo(() => {
     const d = new Date();
-    const day = d.getDay();
-    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-    return new Date(d.setDate(diff));
-  });
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, []);
 
+  // Local controls — seeded from settings but adjustable inside the panel.
+  const [weekStartPref, setWeekStartPref] = useState(weekStartsOn);
+  const [showWeekends, setShowWeekends] = useState(showWeekendsSetting);
+  const [sortBy, setSortBy] = useState("smart");
+  const [priorityFilter, setPriorityFilter] = useState(0);
+
+  const [weekStart, setWeekStart] = useState(() => startOfWeek(today, weekStartsOn));
+  const [showPanel, setShowPanel] = useState(true);
+  const [addingDay, setAddingDay] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [showLayoutPanel, setShowLayoutPanel] = useState(true);
+  const scrollRef = useRef(null);
 
-  // Update current time indicator line
+  // Keep the visible week aligned when the week-start preference changes.
+  useEffect(() => {
+    setWeekStart((prev) => startOfWeek(prev, weekStartPref));
+  }, [weekStartPref]);
+
+  useEffect(() => {
+    setWeekStartPref(weekStartsOn);
+  }, [weekStartsOn]);
+
+  useEffect(() => {
+    setShowWeekends(showWeekendsSetting);
+  }, [showWeekendsSetting]);
+
+  // Refresh the "current time" indicator every minute.
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
 
-  // Compute week dates (Monday to Friday)
-  const weekDates = useMemo(() => {
-    return Array.from({ length: 5 }, (_, i) => {
-      const date = new Date(currentWeekStart);
-      date.setDate(currentWeekStart.getDate() + i);
-      return date;
-    });
-  }, [currentWeekStart]);
+  const days = useMemo(() => {
+    const all = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
+    if (showWeekends) return all;
+    return all.filter((d) => d.getDay() !== 0 && d.getDay() !== 6);
+  }, [weekStart, showWeekends]);
 
-  // Navigate weeks
-  const prevWeek = () => {
-    setCurrentWeekStart((prev) => {
-      const d = new Date(prev);
-      d.setDate(prev.getDate() - 7);
-      return d;
-    });
-  };
+  const dayCount = days.length || 7;
 
-  const nextWeek = () => {
-    setCurrentWeekStart((prev) => {
-      const d = new Date(prev);
-      d.setDate(prev.getDate() + 7);
-      return d;
-    });
-  };
-
-  const monthYearLabel = useMemo(() => {
-    const firstDay = weekDates[0];
-    return firstDay.toLocaleDateString("vi-VN", { month: "long", year: "numeric" });
-  }, [weekDates]);
-
-  // Match tasks to weekdays & hours
-  const mappedTasks = useMemo(() => {
-    const result = {
-      allDay: Array.from({ length: 5 }, () => []),
-      timed: Array.from({ length: 5 }, () => []),
+  const sortTasks = useMemo(() => {
+    return (list) => {
+      const sorted = [...list];
+      if (sortBy === "priority") {
+        sorted.sort((a, b) => (a.priority || 4) - (b.priority || 4));
+      } else if (sortBy === "date") {
+        sorted.sort((a, b) => {
+          const ma = minutesFromMidnight(a.dueTime) ?? 9999;
+          const mb = minutesFromMidnight(b.dueTime) ?? 9999;
+          return ma - mb;
+        });
+      } else {
+        // "smart": time first, then priority.
+        sorted.sort((a, b) => {
+          const ma = minutesFromMidnight(a.dueTime) ?? 9999;
+          const mb = minutesFromMidnight(b.dueTime) ?? 9999;
+          if (ma !== mb) return ma - mb;
+          return (a.priority || 4) - (b.priority || 4);
+        });
+      }
+      return sorted;
     };
+  }, [sortBy]);
 
-    tasks.forEach((t) => {
-      if (t.done || !t.dueDate) return;
-      const taskDate = new Date(t.dueDate);
-      
-      // Check if task falls in this week
-      const dayIndex = weekDates.findIndex(
-        (wd) => wd.getDate() === taskDate.getDate() &&
-                wd.getMonth() === taskDate.getMonth() &&
-                wd.getFullYear() === taskDate.getFullYear()
-      );
+  const visibleTasks = useMemo(() => {
+    if (!priorityFilter) return tasks;
+    return tasks.filter((t) => (t.priority || 4) === priorityFilter);
+  }, [tasks, priorityFilter]);
 
-      if (dayIndex !== -1) {
-        if (!t.dueTime) {
-          result.allDay[dayIndex].push(t);
-        } else {
-          // Parse dueTime (e.g. "17:00" or "17:00-18:00")
-          const timeStr = t.dueTime.split("-")[0].trim();
-          const [hoursStr, minutesStr] = timeStr.split(":");
-          const hour = parseInt(hoursStr, 10);
-          const minute = parseInt(minutesStr, 10) || 0;
-
-          if (!isNaN(hour) && hour >= 8 && hour <= 22) {
-            result.timed[dayIndex].push({
-              task: t,
-              hour,
-              minute,
-              timeLabel: t.dueTime,
-            });
-          } else {
-            // Out of grid range, place in allDay
-            result.allDay[dayIndex].push(t);
-          }
-        }
+  const { allDayTasks, timedTasks } = useMemo(() => {
+    const allDay = {};
+    const timed = {};
+    days.forEach((d) => {
+      allDay[d.toDateString()] = [];
+      timed[d.toDateString()] = [];
+    });
+    visibleTasks.forEach((t) => {
+      const d = parseLocalDate(t.dueDate);
+      if (!d) return;
+      const key = d.toDateString();
+      if (!(key in allDay)) return;
+      if (t.dueTime && minutesFromMidnight(t.dueTime) !== null) {
+        timed[key].push(t);
+      } else {
+        allDay[key].push(t);
       }
     });
+    Object.keys(allDay).forEach((k) => { allDay[k] = sortTasks(allDay[k]); });
+    Object.keys(timed).forEach((k) => { timed[k] = sortTasks(timed[k]); });
+    return { allDayTasks: allDay, timedTasks: timed };
+  }, [visibleTasks, days, sortTasks]);
 
-    return result;
-  }, [tasks, weekDates]);
+  const nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+  const nowDayIdx = days.findIndex((d) => isSameDay(d, currentTime));
 
-  // Calculate current time indicator line top position
-  const currentIndicatorTop = useMemo(() => {
-    const currentHour = currentTime.getHours();
-    const currentMin = currentTime.getMinutes();
-    
-    if (currentHour < 8 || currentHour >= 22) return null;
-    
-    const rowHeight = 72; // height in CSS of each hour row
-    const startHourOffset = currentHour - 8;
-    return startHourOffset * rowHeight + (currentMin / 60) * rowHeight;
-  }, [currentTime]);
+  function prevWeek() { setWeekStart((w) => addDays(w, -7)); }
+  function nextWeek() { setWeekStart((w) => addDays(w, 7)); }
+  function goToday() { setWeekStart(startOfWeek(today, weekStartPref)); }
 
-  // Determine if today is in current displayed week
-  const todayIndex = useMemo(() => {
-    const today = new Date();
-    return weekDates.findIndex(
-      (wd) => wd.getDate() === today.getDate() &&
-              wd.getMonth() === today.getMonth() &&
-              wd.getFullYear() === today.getFullYear()
-    );
-  }, [weekDates]);
+  function resetControls() {
+    setWeekStartPref(weekStartsOn);
+    setShowWeekends(showWeekendsSetting);
+    setSortBy("smart");
+    setPriorityFilter(0);
+    setWeekStart(startOfWeek(today, weekStartsOn));
+  }
+
+  const headerLabel = useMemo(() => {
+    const months = new Set(days.map((d) => d.getMonth()));
+    const years = new Set(days.map((d) => d.getFullYear()));
+    const yearStr = [...years].join(" – ");
+    if (months.size === 1) return `${MONTH_NAMES[[...months][0]]} ${yearStr}`;
+    return [...months].map((m) => MONTH_NAMES[m]).join(" – ") + " " + yearStr;
+  }, [days]);
 
   return (
-    <div className="calendar-week-shell" style={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
-      <div className="calendar-week-main" style={{ flex: 1, display: "flex", flexDirection: "column", padding: "20px 24px", overflowY: "auto" }}>
-        
-        {/* Header navigation */}
-        <header className="calendar-week-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-          <div>
-            <h2 style={{ fontSize: "24px", fontWeight: "700", margin: 0 }}>Sắp tới</h2>
-            <p className="calendar-month-label" style={{ fontSize: "14px", color: "var(--muted)", margin: "4px 0 0" }}>{monthYearLabel}</p>
-          </div>
-          
-          <div className="calendar-controls" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <button className="icon-btn calendar-nav-btn" onClick={prevWeek} style={{ padding: "6px", border: "1px solid var(--line)", borderRadius: "6px" }}>
+    <div style={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
+      <div className="cal-shell" style={{ flex: 1 }}>
+        {/* Toolbar */}
+        <div className="cal-toolbar">
+          <div className="cal-toolbar-left">
+            <button className="cal-today-btn" onClick={goToday} type="button">Hôm nay</button>
+            <button className="cal-nav-btn" onClick={prevWeek} type="button" aria-label="Tuần trước">
               <ChevronLeft size={16} />
             </button>
-            <button className="calendar-today-btn" onClick={() => setCurrentWeekStart(new Date())} style={{ padding: "6px 12px", border: "1px solid var(--line)", borderRadius: "6px", fontSize: "12.5px", fontWeight: "600", cursor: "pointer", background: "transparent" }}>
-              Hôm nay
-            </button>
-            <button className="icon-btn calendar-nav-btn" onClick={nextWeek} style={{ padding: "6px", border: "1px solid var(--line)", borderRadius: "6px" }}>
+            <button className="cal-nav-btn" onClick={nextWeek} type="button" aria-label="Tuần sau">
               <ChevronRight size={16} />
             </button>
-            
-            <button 
-              className={`top-btn ${showLayoutPanel ? "top-btn-active" : ""}`} 
-              onClick={() => setShowLayoutPanel(!showLayoutPanel)}
-              style={{ marginLeft: "12px" }}
+            <span className="cal-header-label">{headerLabel}</span>
+          </div>
+          <div className="cal-toolbar-right">
+            <button
+              className={`cal-layout-btn ${showPanel ? "active" : ""}`}
+              onClick={() => setShowPanel((v) => !v)}
+              type="button"
             >
-              <Sliders size={14} /> Hiển thị
+              <Sliders size={14} style={{ marginRight: 4, verticalAlign: "-2px" }} />
+              Hiển thị
             </button>
           </div>
-        </header>
+        </div>
 
-        {/* Calendar Timeline Grid container */}
-        <div className="calendar-grid-container" style={{ display: "flex", flexDirection: "column", flex: 1, background: "var(--panel)", border: "1px solid var(--line)", borderRadius: "8px", overflow: "hidden" }}>
-          
-          {/* Days horizontal row */}
-          <div className="calendar-days-row" style={{ display: "grid", gridTemplateColumns: "60px repeat(5, 1fr)", borderBottom: "1px solid var(--line)", background: "#faf8f5" }}>
-            <div className="time-col-spacer" style={{ borderRight: "1px solid var(--line)" }} />
-            {weekDates.map((date, idx) => {
-              const isDateToday = checkIsToday(date);
+        {/* Grid */}
+        <div className="cal-grid-wrap" ref={scrollRef}>
+          {/* Day header row */}
+          <div className="cal-day-header-row">
+            <div className="cal-time-gutter" />
+            {days.map((day, i) => {
+              const isT = isSameDay(day, today);
               return (
-                <div key={idx} className="day-col-header" style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "10px 4px", borderRight: idx < 4 ? "1px solid var(--line)" : "none" }}>
-                  <span style={{ fontSize: "11px", textTransform: "uppercase", color: "var(--muted)", fontWeight: "700", letterSpacing: "0.04em" }}>
-                    {WEEKDAYS[idx]}
-                  </span>
-                  <span 
-                    style={{ 
-                      fontSize: "16px", 
-                      fontWeight: "700", 
-                      marginTop: "4px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "28px",
-                      height: "28px",
-                      borderRadius: "50%",
-                      background: isDateToday ? "#e44332" : "transparent",
-                      color: isDateToday ? "#fff" : "var(--text)"
-                    }}
-                  >
-                    {date.getDate()}
-                  </span>
+                <div key={i} className={`cal-day-header ${isT ? "cal-day-today" : ""}`}>
+                  <span className="cal-day-name">{DAY_LABELS[day.getDay()]}</span>
+                  <span className={`cal-day-num ${isT ? "cal-day-num-today" : ""}`}>{day.getDate()}</span>
                 </div>
               );
             })}
           </div>
 
-          {/* All day tasks banner row */}
-          <div className="calendar-allday-row" style={{ display: "grid", gridTemplateColumns: "60px repeat(5, 1fr)", borderBottom: "1px solid var(--line)", background: "#fffefc", minHeight: "44px" }}>
-            <div className="time-col-label" style={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "var(--muted)", fontWeight: "600", borderRight: "1px solid var(--line)", textTransform: "uppercase" }}>
-              Cả ngày
+          {/* All-day row */}
+          <div className="cal-allday-row">
+            <div className="cal-time-gutter cal-allday-label">Cả ngày</div>
+            {days.map((day, i) => {
+              const key = day.toDateString();
+              const dayAllTasks = allDayTasks[key] || [];
+              return (
+                <div key={i} className="cal-allday-cell">
+                  {dayAllTasks.map((t, ti) => (
+                    <button
+                      key={t._id}
+                      className={`cal-task-chip ${t.done ? "cal-task-chip-done" : ""}`}
+                      style={{ background: taskColor(ti) }}
+                      onClick={() => onToggle?.(t._id)}
+                      title={`${t.title} — bấm để đánh dấu hoàn thành`}
+                      type="button"
+                    >
+                      {t.title}
+                    </button>
+                  ))}
+                  {onAdd && (
+                    <button
+                      className="cal-add-in-day"
+                      type="button"
+                      title="Thêm công việc"
+                      onClick={() => setAddingDay(day.toISOString().split("T")[0])}
+                    >
+                      <Plus size={11} />
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Inline add form */}
+          {addingDay && onAdd && (
+            <div className="cal-add-inline-wrap">
+              <AddTaskInline
+                defaultProject={activeProject?.name || "Inbox"}
+                defaultProjectId={activeProject?._id || ""}
+                lockProject={Boolean(activeProject)}
+                projects={projects}
+                onAdd={async (data) => {
+                  await onAdd({ ...data, dueDate: data.dueDate || addingDay });
+                  setAddingDay(null);
+                }}
+                onCancel={() => setAddingDay(null)}
+              />
             </div>
-            {mappedTasks.allDay.map((dayTasks, idx) => (
-              <div key={idx} className="allday-cell" style={{ padding: "4px", borderRight: idx < 4 ? "1px solid var(--line)" : "none", display: "flex", flexDirection: "column", gap: "4px" }}>
-                {dayTasks.map((t) => (
-                  <div 
-                    key={t._id} 
-                    className="allday-task-pill"
-                    onClick={() => onToggle?.(t._id)}
-                    style={{
-                      fontSize: "11.5px",
-                      fontWeight: "600",
-                      background: "#faf3eb",
-                      borderLeft: "2.5px solid #eb8909",
-                      padding: "3px 6px",
-                      borderRadius: "3px",
-                      cursor: "pointer",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      color: "var(--text)"
-                    }}
-                  >
-                    {t.title}
-                  </div>
+          )}
+
+          {/* Time grid */}
+          <div className="cal-time-grid" style={{ height: HOUR_HEIGHT * 24 }}>
+            {HOURS.map((h) => (
+              <div key={h} className="cal-hour-row" style={{ top: h * HOUR_HEIGHT, height: HOUR_HEIGHT }}>
+                <div className="cal-time-gutter cal-time-label">
+                  {h === 0 ? "" : `${String(h).padStart(2, "0")}:00`}
+                </div>
+                {days.map((_, di) => (
+                  <div key={di} className="cal-hour-cell" />
                 ))}
               </div>
             ))}
-          </div>
 
-          {/* Grid body with hour rows and absolute events */}
-          <div className="calendar-grid-body" style={{ position: "relative", height: `${HOURS.length * 72}px`, display: "grid", gridTemplateColumns: "60px repeat(5, 1fr)" }}>
-            
-            {/* Left hour labels column */}
-            <div className="time-labels-col" style={{ borderRight: "1px solid var(--line)", display: "flex", flexDirection: "column", height: "100%" }}>
-              {HOURS.map((hour) => (
-                <div 
-                  key={hour} 
-                  style={{ 
-                    height: "72px", 
-                    display: "flex", 
-                    justifyContent: "center", 
-                    paddingTop: "6px",
-                    fontSize: "11.5px", 
-                    color: "var(--muted)", 
-                    fontWeight: "600",
-                    borderBottom: "1px solid rgba(0,0,0,0.03)"
-                  }}
-                >
-                  {`${hour}:00`}
-                </div>
-              ))}
-            </div>
-
-            {/* Grid days columns */}
-            {weekDates.map((_, colIdx) => (
-              <div 
-                key={colIdx} 
-                className="day-grid-column" 
-                style={{ 
-                  position: "relative", 
-                  borderRight: colIdx < 4 ? "1px solid var(--line)" : "none",
-                  height: "100%",
-                  backgroundImage: "linear-gradient(to bottom, transparent 71px, var(--line) 72px)",
-                  backgroundSize: "100% 72px"
+            {/* Current time indicator */}
+            {nowDayIdx >= 0 && (
+              <div
+                className="cal-now-line"
+                style={{
+                  top: (nowMinutes / 60) * HOUR_HEIGHT,
+                  left: `calc(var(--cal-gutter-w) + ${nowDayIdx} * (100% - var(--cal-gutter-w)) / ${dayCount})`,
+                  width: `calc((100% - var(--cal-gutter-w)) / ${dayCount})`,
                 }}
-              >
-                {/* Render absolute timed task cards inside this column */}
-                {mappedTasks.timed[colIdx].map(({ task, hour, minute, timeLabel }) => {
-                  const hourOffset = hour - 8;
-                  const cardTop = hourOffset * 72 + (minute / 60) * 72;
-                  
-                  return (
-                    <div
-                      key={task._id}
-                      onClick={() => onToggle?.(task._id)}
-                      style={{
-                        position: "absolute",
-                        top: `${cardTop + 4}px`,
-                        left: "4px",
-                        right: "4px",
-                        height: "56px",
-                        background: "#f4f7f6",
-                        borderLeft: "3.5px solid #4a9fe5",
-                        borderRadius: "4px",
-                        padding: "6px 8px",
-                        boxShadow: "0 1.5px 3px rgba(0,0,0,0.05)",
-                        cursor: "pointer",
-                        zIndex: 5,
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        overflow: "hidden"
-                      }}
-                      title={`${task.title} lúc ${timeLabel}`}
-                    >
-                      <span style={{ fontSize: "11.5px", fontWeight: "600", color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                        {task.title}
-                      </span>
-                      <span style={{ fontSize: "10px", color: "var(--muted)", fontWeight: "500" }}>
-                        {timeLabel}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
-
-            {/* Red timeline marker line indicating current hour/minute */}
-            {currentIndicatorTop !== null && todayIndex !== -1 && (
-              <div 
-                style={{ 
-                  position: "absolute", 
-                  top: `${currentIndicatorTop}px`, 
-                  left: "60px", 
-                  right: 0, 
-                  height: "2px", 
-                  background: "#e44332", 
-                  zIndex: 10, 
-                  pointerEvents: "none",
-                  display: "flex",
-                  alignItems: "center"
-                }}
-              >
-                {/* Red dot marker at start of line */}
-                <div 
-                  style={{ 
-                    width: "8px", 
-                    height: "8px", 
-                    borderRadius: "50%", 
-                    background: "#e44332", 
-                    marginLeft: "-4px" 
-                  }} 
-                />
-              </div>
+              />
             )}
 
+            {/* Timed task chips */}
+            {days.map((day, di) => {
+              const key = day.toDateString();
+              const tTasks = timedTasks[key] || [];
+              return tTasks.map((t, ti) => {
+                const mins = minutesFromMidnight(t.dueTime);
+                if (mins === null) return null;
+                const topPx = (mins / 60) * HOUR_HEIGHT;
+                const colLeft = `calc(var(--cal-gutter-w) + ${di} * (100% - var(--cal-gutter-w)) / ${dayCount} + 2px)`;
+                const colW = `calc((100% - var(--cal-gutter-w)) / ${dayCount} - 4px)`;
+                return (
+                  <button
+                    key={t._id}
+                    className={`cal-timed-chip ${t.done ? "cal-task-chip-done" : ""}`}
+                    style={{
+                      top: topPx,
+                      left: colLeft,
+                      width: colW,
+                      background: taskColor(ti),
+                      minHeight: HOUR_HEIGHT * 0.5,
+                    }}
+                    onClick={() => onToggle?.(t._id)}
+                    title={`${t.title} lúc ${t.dueTime}`}
+                    type="button"
+                  >
+                    <span className="cal-timed-title">{t.title}</span>
+                    <span className="cal-timed-time">{t.dueTime}</span>
+                  </button>
+                );
+              });
+            })}
           </div>
-
         </div>
-
       </div>
 
-      {/* Premium display/layout controls sidebar panel on right */}
-      {showLayoutPanel && (
-        <aside 
-          className="calendar-layout-panel" 
-          style={{ 
-            width: "280px", 
-            borderLeft: "1px solid var(--line)", 
-            background: "var(--panel)", 
+      {/* Layout / filter panel */}
+      {showPanel && (
+        <aside
+          className="calendar-layout-panel"
+          style={{
+            width: "280px",
+            borderLeft: "1px solid var(--line)",
+            background: "var(--panel)",
             padding: "20px 16px",
             display: "flex",
             flexDirection: "column",
-            gap: "20px",
+            gap: "18px",
             overflowY: "auto",
-            animation: "slideIn 0.2s ease"
+            animation: "slideIn 0.2s ease",
           }}
         >
           <div>
-            <h3 style={{ fontSize: "14px", fontWeight: "700", margin: "0 0 12px", display: "flex", alignItems: "center", gap: "6px" }}>
-              Bố cục <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#eb8909" }} />
+            <h3 style={{ fontSize: "14px", fontWeight: 700, margin: "0 0 12px", display: "flex", alignItems: "center", gap: "6px" }}>
+              Bố cục
+              <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--accent)" }} />
             </h3>
-            
-            {/* View options selectors */}
-            <div style={{ display: "flex", border: "1px solid var(--line)", borderRadius: "6px", overflow: "hidden", marginBottom: "12px" }}>
-              <button style={{ flex: 1, padding: "8px", fontSize: "12px", border: 0, fontWeight: "600", cursor: "pointer", background: "transparent", color: "var(--muted)" }}>Danh sách</button>
-              <button style={{ flex: 1, padding: "8px", fontSize: "12px", border: 0, fontWeight: "600", cursor: "pointer", background: "transparent", color: "var(--muted)" }}>Bảng</button>
-              <button style={{ flex: 1, padding: "8px", fontSize: "12px", border: 0, fontWeight: "700", cursor: "pointer", background: "#f0eeeb", color: "var(--text)" }}>Lịch</button>
-            </div>
-            
-            {/* Time frame switchers */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "13px", padding: "6px 0" }}>
-              <span style={{ fontWeight: "600", color: "var(--muted)" }}>Dòng thời gian</span>
-              <div style={{ display: "flex", gap: "4px", background: "#f0eeeb", padding: "2px", borderRadius: "4px" }}>
-                <span style={{ fontSize: "11px", fontWeight: "700", background: "#fff", padding: "2px 8px", borderRadius: "3px" }}>Tuần</span>
-                <span style={{ fontSize: "11px", fontWeight: "600", color: "var(--muted)", padding: "2px 8px" }}>Tháng</span>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "13px", padding: "8px 0" }}>
+              <span style={{ fontWeight: 600, color: "var(--muted)" }}>Bắt đầu tuần</span>
+              <div style={{ display: "flex", gap: "4px", background: "#f0eeeb", padding: "2px", borderRadius: "6px" }}>
+                <button
+                  type="button"
+                  onClick={() => setWeekStartPref("monday")}
+                  style={pillStyle(weekStartPref === "monday")}
+                >Thứ 2</button>
+                <button
+                  type="button"
+                  onClick={() => setWeekStartPref("sunday")}
+                  style={pillStyle(weekStartPref === "sunday")}
+                >Chủ nhật</button>
               </div>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "13px", padding: "10px 0" }}>
-              <span style={{ fontWeight: "600", color: "var(--muted)" }}>Lịch lặp trong tương lai</span>
-              <span style={{ width: "32px", height: "18px", borderRadius: "10px", background: "#ccc", display: "inline-block", position: "relative" }}>
-                <span style={{ width: "14px", height: "14px", borderRadius: "50%", background: "#fff", position: "absolute", top: "2px", left: "2px" }} />
-              </span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "13px", padding: "8px 0" }}>
+              <span style={{ fontWeight: 600, color: "var(--muted)" }}>Hiển thị cuối tuần</span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={showWeekends}
+                aria-label="Hiển thị cuối tuần"
+                onClick={() => setShowWeekends((v) => !v)}
+                style={{
+                  width: "34px",
+                  height: "20px",
+                  borderRadius: "12px",
+                  border: 0,
+                  cursor: "pointer",
+                  background: showWeekends ? "var(--accent)" : "#ccc",
+                  position: "relative",
+                  transition: "background .15s",
+                  flexShrink: 0,
+                }}
+              >
+                <span style={{
+                  width: "14px", height: "14px", borderRadius: "50%", background: "#fff",
+                  position: "absolute", top: "3px", left: showWeekends ? "17px" : "3px",
+                  transition: "left .15s",
+                }} />
+              </button>
             </div>
           </div>
 
           <hr style={{ border: 0, borderTop: "1px solid var(--line)", margin: 0 }} />
 
-          {/* Grouping and Sorting filters */}
           <div>
-            <h3 style={{ fontSize: "14px", fontWeight: "700", margin: "0 0 12px" }}>Sắp xếp &amp; Bộ lọc</h3>
-            
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <label style={{ fontSize: "11.5px", fontWeight: "600", color: "var(--muted)" }}>Sắp xếp</label>
-                <select style={{ padding: "6px", border: "1px solid var(--line)", borderRadius: "4px", fontSize: "12.5px", background: "var(--panel)", color: "var(--text)" }}>
-                  <option>Thông minh</option>
-                  <option>Ngày đến hạn</option>
-                  <option>Mức ưu tiên</option>
+            <h3 style={{ fontSize: "14px", fontWeight: 700, margin: "0 0 12px" }}>Sắp xếp &amp; Bộ lọc</h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                <label style={{ fontSize: "11.5px", fontWeight: 600, color: "var(--muted)" }}>Sắp xếp</label>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  style={selectStyle}
+                >
+                  <option value="smart">Thông minh</option>
+                  <option value="date">Theo giờ đến hạn</option>
+                  <option value="priority">Theo mức ưu tiên</option>
                 </select>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <label style={{ fontSize: "11.5px", fontWeight: "600", color: "var(--muted)" }}>Người phụ trách</label>
-                <select style={{ padding: "6px", border: "1px solid var(--line)", borderRadius: "4px", fontSize: "12.5px", background: "var(--panel)", color: "var(--text)" }}>
-                  <option>Tôi và chưa phân công</option>
-                  <option>Toàn bộ nhóm</option>
-                </select>
-              </div>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <label style={{ fontSize: "11.5px", fontWeight: "600", color: "var(--muted)" }}>Mức ưu tiên</label>
-                <select style={{ padding: "6px", border: "1px solid var(--line)", borderRadius: "4px", fontSize: "12.5px", background: "var(--panel)", color: "var(--text)" }}>
-                  <option>Tất cả</option>
-                  <option>P1 - Khẩn cấp</option>
-                  <option>P2 - Cao</option>
+              <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                <label style={{ fontSize: "11.5px", fontWeight: 600, color: "var(--muted)" }}>Mức ưu tiên</label>
+                <select
+                  value={priorityFilter}
+                  onChange={(e) => setPriorityFilter(Number(e.target.value))}
+                  style={selectStyle}
+                >
+                  {PRIORITY_OPTIONS.map((p) => (
+                    <option key={p.value} value={p.value}>{p.label}</option>
+                  ))}
                 </select>
               </div>
             </div>
           </div>
 
           <div style={{ marginTop: "auto" }}>
-            <button style={{ width: "100%", padding: "8px", border: 0, background: "transparent", color: "#e44332", fontSize: "13px", fontWeight: "600", cursor: "pointer", textDecoration: "underline" }}>
-              Đặt lại tất cả
+            <button
+              type="button"
+              onClick={resetControls}
+              style={{
+                width: "100%", padding: "8px", border: 0, background: "transparent",
+                color: "var(--accent)", fontSize: "13px", fontWeight: 600, cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
+              }}
+            >
+              <RotateCcw size={13} /> Đặt lại tất cả
             </button>
           </div>
         </aside>
       )}
     </div>
   );
+}
+
+const selectStyle = {
+  padding: "7px 8px",
+  border: "1px solid var(--line)",
+  borderRadius: "6px",
+  fontSize: "12.5px",
+  background: "var(--panel)",
+  color: "var(--text)",
+  cursor: "pointer",
+};
+
+function pillStyle(active) {
+  return {
+    fontSize: "11px",
+    fontWeight: active ? 700 : 600,
+    background: active ? "#fff" : "transparent",
+    color: active ? "var(--text)" : "var(--muted)",
+    padding: "3px 9px",
+    borderRadius: "4px",
+    border: 0,
+    cursor: "pointer",
+    boxShadow: active ? "0 1px 2px rgba(0,0,0,0.08)" : "none",
+  };
 }

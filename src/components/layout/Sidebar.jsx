@@ -190,6 +190,7 @@ export default function Sidebar({
   activeProjectId,
   onProjectSelect,
   workspaceName,
+  onAddTaskClick,
 }) {
   const countsMap = { inbox: inboxCount || 0, today: todayCount || 0 };
   const initial = user?.name?.[0]?.toUpperCase() || "U";
@@ -226,7 +227,7 @@ export default function Sidebar({
       </div>
 
       {/* Add task */}
-      <button className="add-task-btn" type="button">
+      <button className="add-task-btn" type="button" onClick={() => onAddTaskClick?.()}>
         <span className="add-icon"><Plus size={18} strokeWidth={3} /></span>
         Thêm công việc
       </button>

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { clearAuth, loadSavedAuth, saveAuth } from "./api/client";
 import AuthGate from "./components/auth/AuthGate";
+import AddTaskInline from "./components/common/AddTaskInline";
 import HomePage from "./components/landing/HomePage";
 import Sidebar from "./components/layout/Sidebar";
 import TopBar from "./components/layout/TopBar";
@@ -45,6 +46,7 @@ export default function App() {
 
   const [projectModal, setProjectModal] = useState({ open: false, type: "personal", folderId: null });
   const [folderModal, setFolderModal] = useState({ open: false, type: "personal" });
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
 
   useEffect(() => {
     const saved = loadSavedAuth();
@@ -250,10 +252,26 @@ export default function App() {
           onCloseInsights={() => setShowInsights(false)}
           onToggle={toggleTask}
           onDelete={deleteTask}
+          onAdd={handleAddTask}
+          projects={projects}
+          activeProject={activeProject}
         />
       );
     }
-    if (viewMode === "calendar") return <CalendarView />;
+    if (viewMode === "calendar") {
+      return (
+        <CalendarView
+          tasks={scopedTasks}
+          onToggle={toggleTask}
+          onDelete={deleteTask}
+          onAdd={handleAddTask}
+          projects={projects}
+          activeProject={activeProject}
+          weekStartsOn={settings.calendars.weekStartsOn}
+          showWeekends={settings.calendars.showWeekends}
+        />
+      );
+    }
 
     switch (activeView) {
       case "inbox":
@@ -298,11 +316,7 @@ export default function App() {
         onDeleteFolder={handleDeleteFolder}
         activeProjectId={activeProjectId}
         onProjectSelect={handleProjectSelect}
-        tasks={tasks}
-        onAddTask={handleAddTask}
-        onUpdateTask={updateTask}
-        onDeleteTask={deleteTask}
-        onToggleTask={toggleTask}
+        onAddTaskClick={() => setQuickAddOpen(true)}
       />
 
       <main className="content">
@@ -346,6 +360,33 @@ export default function App() {
         onAdd={handleAddFolder}
         defaultType={folderModal.type}
       />
+
+      {quickAddOpen && (
+        <div className="overlay" role="presentation" onClick={() => setQuickAddOpen(false)}>
+          <section
+            className="modal quick-add-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Thêm công việc"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-header">
+              <h3>Thêm công việc</h3>
+            </div>
+            <AddTaskInline
+              defaultProject={activeProject?.name || "Inbox"}
+              defaultProjectId={activeProject?._id || ""}
+              lockProject={Boolean(activeProject)}
+              projects={projects}
+              onAdd={async (data) => {
+                await handleAddTask(data);
+                setQuickAddOpen(false);
+              }}
+              onCancel={() => setQuickAddOpen(false)}
+            />
+          </section>
+        </div>
+      )}
     </div>
   );
 }

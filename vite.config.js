@@ -1,12 +1,17 @@
 import { defineConfig } from "vite";
 
+const apiProxy = {
+  "/api": {
+    target: "http://127.0.0.1:5050",
+    changeOrigin: true,
+  },
+};
+
 export default defineConfig({
   server: {
-    proxy: {
-      "/api": {
-        target: "http://127.0.0.1:5000",
-        changeOrigin: true,
-      },
-    },
+    proxy: apiProxy,
+  },
+  preview: {
+    proxy: apiProxy,
   },
 });

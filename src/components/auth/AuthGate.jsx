@@ -5,7 +5,7 @@ function TodoistLogo() {
   return (
     <div className="todoist-logo">
       <span className="todoist-mark" aria-hidden="true" />
-      <span className="todoist-word">TODO</span>
+      <span className="todoist-word">TaskFlow</span>
     </div>
   );
 }
@@ -52,7 +52,7 @@ function LoginForm({ onSubmit, onSwitchToRegister, form, setForm, error, loading
         Quên mật khẩu?
       </button>
       <p className="auth-legal">
-        Khi tiếp tục bằng Gmail, bạn đồng ý với Điều khoản dịch vụ và Chính sách quyền riêng tư của Todoist.
+        Khi tiếp tục bằng Gmail, bạn đồng ý với Điều khoản dịch vụ và Chính sách quyền riêng tư của TaskFlow.
       </p>
       <p className="auth-switch">
         Chưa có tài khoản?{" "}
@@ -229,7 +229,7 @@ export default function AuthGate({ onAuthenticated, onBackHome, initialStep = "l
         />
         {isLogin && (
           <p className="auth-right-footer">
-            Mang Todoist theo bạn
+            Mang TaskFlow theo bạn
             <span>Luôn ngăn nắp ở mọi nơi với ứng dụng di động cho iOS và Android.</span>
           </p>
         )}
