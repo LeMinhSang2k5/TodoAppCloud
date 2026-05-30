@@ -1,4 +1,4 @@
-
+<div align="center">
 
 # ✦ TaskFlow
 
@@ -9,17 +9,18 @@ Quản lý việc cần làm theo phong cách Todoist với **Hộp thư đến 
   
 
 
-[React](https://react.dev/)
-[Express](https://expressjs.com/)
-[MongoDB](https://www.mongodb.com/)
-[Vite](https://vitejs.dev/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Express](https://img.shields.io/badge/Express-5-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
 [Demo](#-demo) · [Tính năng](#-tính-năng-nổi-bật) · [Cài đặt](#-cài-đặt-nhanh) · [API](#-api) · [Cấu trúc](#-cấu-trúc-dự-án)
 
   
 
 
-
+</div>
 
 
 
