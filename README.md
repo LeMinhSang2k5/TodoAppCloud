@@ -29,21 +29,31 @@ Quản lý việc cần làm theo phong cách Todoist với **Hộp thư đến 
 ## 📸 Demo
 
 
-| Trang chủ                             | Ứng dụng chính                  | Lịch tuần                    |
-| ------------------------------------- | ------------------------------- | ---------------------------- |
-|                                       |                                 |                              |
-| Landing page với animation & parallax | Sidebar, danh sách, bảng Kanban | Lịch 7 ngày đầy đủ (T2 → CN) |
+<p align="center">
+  <strong>Trang chủ</strong><br />
+  <img src="https://raw.githubusercontent.com/LeMinhSang2k5/TodoAppCloud/master/.github/assets/img/homepage.png" alt="TaskFlow Landing Page" width="90%" />
+</p>
+
+<p align="center">
+  <strong>Ứng dụng chính</strong><br />
+  <img src="https://raw.githubusercontent.com/LeMinhSang2k5/TodoAppCloud/master/.github/assets/img/mainapp.png" alt="TaskFlow Main App" width="90%" />
+</p>
+
+<p align="center">
+  <strong>Lịch tuần</strong><br />
+  <img src="https://raw.githubusercontent.com/LeMinhSang2k5/TodoAppCloud/master/.github/assets/img/calender.png" alt="TaskFlow Calendar View" width="90%" />
+</p>
+
+| Màn hình | Mô tả |
+|----------|-------|
+| Trang chủ | Landing page với animation & parallax |
+| Ứng dụng chính | Sidebar, danh sách, bảng Kanban |
+| Lịch tuần | Lịch 7 ngày đầy đủ (T2 → CN) |
 
 
 ---
 
 ## ✨ Tính năng nổi bật
-
-
-|     |
-| --- |
-|     |
-
 
 ### 🎯 Quản lý công việc
 
@@ -104,18 +114,18 @@ Quản lý việc cần làm theo phong cách Todoist với **Hộp thư đến 
 
 ```mermaid
 flowchart LR
-    subgraph Client["Frontend — Vite :3000"]
+    subgraph Client["Frontend - Vite 3000"]
         LP[Landing Page]
         APP[React App]
         LP --> APP
     end
 
-    subgraph Server["API Server — Express :5050"]
-        AUTH[/auth]
-        TASKS[/tasks]
-        PROJ[/projects]
-        FOLD[/folders]
-        SET[/settings]
+    subgraph Server["API Server - Express 5050"]
+        AUTH[Auth API]
+        TASKS[Tasks API]
+        PROJ[Projects API]
+        FOLD[Folders API]
+        SET[Settings API]
     end
 
     subgraph DB["MongoDB Atlas"]
@@ -124,7 +134,7 @@ flowchart LR
         PROJ_DB[(Projects)]
     end
 
-    APP -->|REST /api| Server
+    APP -->|"REST JSON"| Server
     AUTH --> USERS
     TASKS --> TASKS_DB
     PROJ --> PROJ_DB
